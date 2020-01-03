@@ -1,0 +1,22 @@
+{
+  "name": "streamgather",
+  "version": "1.0.0",
+  "description": "Get all your favorite streamers in one place",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NahuelRaspanti/streamgather.git"
+  },
+  "author": "Nahuel Raspanti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NahuelRaspanti/streamgather/issues"
+  },
+  "homepage": "https://github.com/NahuelRaspanti/streamgather#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
