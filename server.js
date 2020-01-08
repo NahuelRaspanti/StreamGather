@@ -3,9 +3,16 @@ const grant = require("grant-express");
 const cors = require("cors");
 const session = require("express-session");
 
+const axios = require("axios").default;
+
 require('dotenv').config();
 
 var app = express();
+
+
+axios.defaults.withCredentials = true;
+axios.defaults.headers.common['Client-ID'] = process.env.TWITCH_KEY;
+axios.defaults.headers.post['Content-Type'] = 'application/vnd.twitchtv.v5+json'
 
 app.use(session({secret: 'grant', resave: false, saveUninitialized: false}));
 
@@ -23,6 +30,23 @@ app.use(grant({
         "callback": "/handle_twitch_callback"
     }
 }));
+
+
+
+app.get('/get_twitch_streams', function (req, res) {
+    try{
+        axios.get('https://api.twitch.tv/kraken/streams/followed', {headers : {'Authorization': 'OAuth ' + req.session.grant.response.access_token, 'accept': 'application/vnd.twitchtv.v5+json'}})
+            .then(response => {
+                res.send(JSON.stringify(response.data, null, 2))
+            })
+            .catch(error => {
+                res.send(error.response)
+            });
+    }
+    catch(err){
+        console.error("pete", err);
+    }
+});
 
 app.get('/handle_twitch_callback', function (req, res) {
     const { error, error_description, error_uri } = req.query
