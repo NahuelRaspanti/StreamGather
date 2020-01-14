@@ -4,7 +4,9 @@
   "description": "Get all your favorite streamers in one place",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently -kill-others \"npm run client\" \"npm run server\"",
+    "client": "cd client && npm start",
+    "server": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,10 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "grant-express": "^4.6.6",
+    "mongoose": "^5.8.7",
     "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.2"
   }
 }

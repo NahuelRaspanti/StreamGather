@@ -2,13 +2,19 @@ const express = require("express");
 const grant = require("grant-express");
 const cors = require("cors");
 const session = require("express-session");
+var mongoose = require('mongoose');
+const userModel = require('./models/user');
 
 const axios = require("axios").default;
+var Schema = mongoose.Schema;
 
 require('dotenv').config();
 
 var app = express();
 
+app.use(cors());
+
+mongoose.connect('mongodb+srv://admin:4fGW6T2zgoCbkHHk@cluster0-nsozd.gcp.mongodb.net/test?retryWrites=true&w=majority', {useMongoClient: true});
 
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Client-ID'] = process.env.TWITCH_KEY;
@@ -32,12 +38,12 @@ app.use(grant({
 }));
 
 
-
-app.get('/get_twitch_streams', function (req, res) {
+app.get('/get_twitch_streams', async function (req, res) {
     try{
-        axios.get('https://api.twitch.tv/kraken/streams/followed', {headers : {'Authorization': 'OAuth ' + req.session.grant.response.access_token, 'accept': 'application/vnd.twitchtv.v5+json'}})
+        await axios.get('https://api.twitch.tv/kraken/streams/followed',
+             {headers : {'Authorization': 'OAuth ' + 'c40npqm4u8dzj26uoexzpz23rs7hsc', 'Accept': 'application/vnd.twitchtv.v5+json'}})
             .then(response => {
-                res.send(JSON.stringify(response.data, null, 2))
+                res.send(response.data)
             })
             .catch(error => {
                 res.send(error.response)
@@ -48,7 +54,7 @@ app.get('/get_twitch_streams', function (req, res) {
     }
 });
 
-app.get('/handle_twitch_callback', function (req, res) {
+app.get('/handle_twitch_callback', async function (req, res) {
     const { error, error_description, error_uri } = req.query
     if (error) {
         res.status(500).json({
@@ -57,7 +63,23 @@ app.get('/handle_twitch_callback', function (req, res) {
             error_uri
         })
     } else {
-        console.log(req.session)
+        await axios.get('https://api.twitch.tv/kraken/user', 
+        {
+            headers: 
+            {
+                'Authorization': 'OAuth ',
+                'Accept': 'application/vnd.twitchtv.v5+json'
+            }
+        })
+        .then(res => {
+            const user = new userModel({
+                twitchId: res.data._id,
+                twitchAccess: req.session.grant.response.access_token,
+                twitchRefresh: req.session.grant.response.refresh_token
+            })
+            userModel.updateOne({twitchId: user.twitchId}, {})
+
+        })
         res.end(JSON.stringify(req.session, null, 2))
     }
 });
