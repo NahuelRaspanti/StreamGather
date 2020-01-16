@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -10,4 +11,4 @@ const userSchema = new Schema({
     mixerRefresh: String
   });
 
-export default mongoose.model('user', userSchema);
+module.exports = mongoose.model('user', userSchema);

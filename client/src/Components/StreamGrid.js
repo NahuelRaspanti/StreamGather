@@ -14,7 +14,8 @@ class StreamGrid extends React.Component {
     
 
     componentDidMount = async () => {
-        const response = await axios.get('http://localhost:5000/get_twitch_streams');
+        const response = await axios.get('http://localhost:5000/get_twitch_streams',
+        {withCredentials: true});
 
         this.setState({streams: response.data.streams});
     }

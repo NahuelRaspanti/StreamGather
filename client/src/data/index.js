@@ -8,5 +8,5 @@ export const data = [{
     name : "Mixer",
     href : "connect/mixer",
     text : "Login with Mixer",
-    color : "#FJ24KD"
+    color : "#002050"
 }]
