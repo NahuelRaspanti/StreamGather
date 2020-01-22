@@ -5,8 +5,6 @@ const session = require("express-session");
 const mongoose = require('mongoose');
 const userModel = require('./models/user');
 const MongoStore = require('connect-mongo')(session);
-var MemoryStore = session.MemoryStore;
-const sessionStore = new MemoryStore();
 
 const axios = require("axios").default;
 var Schema = mongoose.Schema;
@@ -20,13 +18,13 @@ app.use(cors({
     credentials: true
 }));
 
-//mongoose.connect('mongodb+srv://admin:jq9arryWKcbOyxdp@cluster0-nsozd.gcp.mongodb.net/test?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://admin:jq9arryWKcbOyxdp@cluster0-nsozd.gcp.mongodb.net/test?retryWrites=true&w=majority');
 
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Client-ID'] = process.env.TWITCH_KEY;
 axios.defaults.headers.post['Content-Type'] = 'application/vnd.twitchtv.v5+json'
 
-app.use(session({secret: 'grant', resave: false, saveUninitialized: false, cookie: {maxAge: 1000*60*60*24*30*12 }, store: sessionStore}));
+app.use(session({secret: 'grant', resave: false, saveUninitialized: false, cookie: {maxAge: 1000*60*60*24*30*12 }, store: new MongoStore({mongooseConnection: mongoose.connection})}));
 
 app.use(grant({
     "defaults": {
@@ -71,14 +69,12 @@ app.get('/get_twitch_streams', async function (req, res) {
             .then(response => {
                 res.send(response.data)
             })
-            .catch(error => {
+            .catch(error => { //Manejar el 401 Unauthorized para refreshear el token y guardar el nuevo
                 res.send(error.response)
-                console.log(MongoStore.getItem(req.sessionID))
             });
     }
     catch(err){
         console.error("pete", err);
-        console.log(MongoStore.getItem(req.sessionID))
     }
 });
 
@@ -91,6 +87,12 @@ app.get('/handle_twitch_callback', async function (req, res) {
             error_uri
         })
     } else {
+        if (req.user) {
+
+        }
+        else {
+            
+        }
         res.redirect("/");
     }
 });
@@ -116,6 +118,10 @@ app.get('/handle_mixer_callback', async function (req, res) {
             res.end(err);
         })
     }
+});
+
+app.get('/fetch_current_user', (req, res) => {
+    res.send(req.user)
 });
 
 app.get('/', (req, res) => {
