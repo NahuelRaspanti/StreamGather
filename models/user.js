@@ -11,4 +11,4 @@ const userSchema = new Schema({
     mixerRefresh: String
   });
 
-mongoose.model('user', userSchema);
+module.exports = userSchema

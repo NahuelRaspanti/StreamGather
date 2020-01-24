@@ -11,13 +11,50 @@ const StreamGridStyled = styled(Grid)({
 
 class StreamGrid extends React.Component {
     state = {streams: []};
-    
 
-    componentDidMount = async () => {
+    getCurrentUser = async () => {
+        var user = await axios.get('http://localhost:5000/fetch_current_user',
+        {withCredentials: true});
+
+        return user.data;
+    }
+    
+    getTwitchStreams = async () => {
         const response = await axios.get('http://localhost:5000/get_twitch_streams',
         {withCredentials: true});
 
-        this.setState({streams: response.data.streams});
+        var parsedData = response.data.streams.map(str => {
+            var streams = {image: str.preview.medium, avatar: str.channel.logo, streamerName: str.channel.display_name, game: str.channel.game};
+            return streams;
+        })
+
+        return parsedData;
+    }
+
+    getMixerStreams = async () => {
+        const response = await axios.get('http://localhost:5000/get_mixer_streams',
+        {withCredentials: true});
+
+        if(response.data.length === undefined) return {}
+        var parsedData = response.data.map(str => {
+            var streams = {image: 'https://thumbs.mixer.com/channel/'+ str.id +'.small.jpg', avatar: str.user.avatarUrl, streamerName: str.user.username, game: str.type.name};
+            return streams;
+        })
+
+        return parsedData;
+    }
+
+    componentDidMount = async () => {
+        var twitchStreams = {}
+        var mixerStreams = {}
+        var user = await this.getCurrentUser();
+        if(user.twitchAccess)
+        twitchStreams = await this.getTwitchStreams();
+        if(user.mixerAccess)
+        mixerStreams = await this.getMixerStreams();
+
+        if(twitchStreams.length != undefined || mixerStreams.length != undefined)
+        this.setState({streams: twitchStreams.concat(mixerStreams)});
     }
 
     render() {
