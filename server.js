@@ -71,7 +71,12 @@ app.get('/get_twitch_streams', async function (req, res) {
             .then(response => {
                 res.send(response.data)
             })
-            .catch(error => { //Manejar el 401 Unauthorized para refreshear el token y guardar el nuevo
+            .catch(async error => { //Manejar el 401 Unauthorized para refreshear el token y guardar el nuevo
+                if(error.response.status === 401 && error.response.statusText === "Unauthorized"){
+                    var refreshedUser = await refreshTwitchToken(req.session.user.twitchId, req.session.user.twitchRefresh)
+                    req.session.user = refreshedUser
+                    res.redirect('/get_twitch_streams')
+                }
                 res.send(error.response.statusText)
             });
     }
@@ -98,8 +103,8 @@ app.get('/handle_twitch_callback', async function (req, res) {
         })
         .then(async resp => {
             user = await findUser(resp.data._id, 'twitch')
-            if(req.session.user._id != undefined || user){
-                var id = req.session.user._id ? req.session.user._id : user.id
+            if(req.session.user || user){
+                var id =  user.id || req.session.user._id
                 var user = await updateUser(id, req.session.grant.response, resp.data._id, 'twitch')
             }
             else{
@@ -145,6 +150,29 @@ app.get('/handle_mixer_callback', async function (req, res) {
         })
     }
 });
+
+const refreshTwitchToken = async (twitchId, twitchRefresh) => {
+    await axios.post('https://id.twitch.tv/oauth2/token', {
+        params: {
+            grant_type: "refresh_token",
+            refresh_token: twitchRefresh,
+            client_id: process.env.TWITCH_KEY,
+            client_secret: process.env.TWITCH_SECRET
+        }
+    })
+    .then(async response => {
+        var refreshedUser = await refreshAccessToken(response.data, twitchId)
+        return refreshedUser
+    })
+    .catch(err => {
+        return err.response;
+    })
+}
+
+const refreshAccessToken = async (data, id) => {
+    var user = User.findByIdAndUpdate({_id: id}, {twitchAccess: data.access_token, twitchRefresh: data.refresh_token}, {new: true}).exec()
+    return user;
+}
 
 const findUser = async (providerId, provider) => {
     var user = User.findOne({[`${provider}Id`]: providerId}).exec()

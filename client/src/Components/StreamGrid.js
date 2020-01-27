@@ -24,7 +24,7 @@ class StreamGrid extends React.Component {
         {withCredentials: true});
 
         var parsedData = response.data.streams.map(str => {
-            var streams = {image: str.preview.medium, avatar: str.channel.logo, streamerName: str.channel.display_name, game: str.channel.game};
+            var streams = {image: str.preview.medium, avatar: str.channel.logo, streamerName: str.channel.display_name, game: str.channel.game, viewers: str.viewers};
             return streams;
         })
 
@@ -37,7 +37,7 @@ class StreamGrid extends React.Component {
 
         if(response.data.length === undefined) return {}
         var parsedData = response.data.map(str => {
-            var streams = {image: 'https://thumbs.mixer.com/channel/'+ str.id +'.small.jpg', avatar: str.user.avatarUrl, streamerName: str.user.username, game: str.type.name};
+            var streams = {image: 'https://thumbs.mixer.com/channel/'+ str.id +'.small.jpg', avatar: str.user.avatarUrl, streamerName: str.user.username, game: str.type.name, viewers: str.type.viewersCurrent};
             return streams;
         })
 
@@ -53,8 +53,16 @@ class StreamGrid extends React.Component {
         if(user.mixerAccess)
         mixerStreams = await this.getMixerStreams();
 
-        if(twitchStreams.length != undefined || mixerStreams.length != undefined)
-        this.setState({streams: twitchStreams.concat(mixerStreams)});
+        if(twitchStreams.length !== undefined || mixerStreams.length !== undefined)
+        {
+            if(mixerStreams.length > 0){
+                this.setState({streams: mixerStreams.concat(twitchStreams)});
+            }
+            else {
+                this.setState({streams: twitchStreams.concat(mixerStreams)});
+            }
+        }
+        
     }
 
     render() {
