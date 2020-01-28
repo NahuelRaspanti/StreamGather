@@ -77,7 +77,6 @@ app.get('/get_twitch_streams', async function (req, res) {
                     req.session.user = refreshedUser
                     res.redirect('/get_twitch_streams')
                 }
-                res.send(error.response.statusText)
             });
     }
     catch(err){

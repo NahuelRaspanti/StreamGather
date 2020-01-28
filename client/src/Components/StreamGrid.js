@@ -24,7 +24,7 @@ class StreamGrid extends React.Component {
         {withCredentials: true});
 
         var parsedData = response.data.streams.map(str => {
-            var streams = {image: str.preview.medium, avatar: str.channel.logo, streamerName: str.channel.display_name, game: str.channel.game, viewers: str.viewers};
+            var streams = {image: str.preview.medium, avatar: str.channel.logo, streamerName: str.channel.display_name, game: str.channel.game, viewers: str.viewers, title: str.channel.status, url: str.channel.url};
             return streams;
         })
 
@@ -37,7 +37,7 @@ class StreamGrid extends React.Component {
 
         if(response.data.length === undefined) return {}
         var parsedData = response.data.map(str => {
-            var streams = {image: 'https://thumbs.mixer.com/channel/'+ str.id +'.small.jpg', avatar: str.user.avatarUrl, streamerName: str.user.username, game: str.type.name, viewers: str.type.viewersCurrent};
+            var streams = {image: 'https://thumbs.mixer.com/channel/'+ str.id +'.small.jpg', avatar: str.user.avatarUrl, streamerName: str.user.username, game: str.type.name, viewers: str.type.viewersCurrent, title: str.name, url: 'https://mixer.com/' + str.user.username};
             return streams;
         })
 
@@ -70,7 +70,7 @@ class StreamGrid extends React.Component {
             return <StreamCard key={stream._id} stream = {stream}></StreamCard>
         });
         return (
-            <StreamGridStyled container spacing={3}>{streams}</StreamGridStyled>
+            <StreamGridStyled container spacing={3} xs={12}>{streams}</StreamGridStyled>
         )
     }
 }
