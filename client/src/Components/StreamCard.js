@@ -2,7 +2,6 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import { Grid, Avatar, Typography, Box, Link, SvgIcon } from '@material-ui/core';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import twitch from '../Images/twitch.jpg'
 import {ReactComponent as TwitchSVG} from '../Images/twitchsvg.svg'
 import {ReactComponent as MixerSVG} from '../Images/mixersvg.svg'
 
