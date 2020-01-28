@@ -52,7 +52,7 @@ const grantConfig =
     "production": {
         "defaults": {
             "protocol": "https",
-            "host": "localhost:5000",
+            "host": "stream-gather.herokuapp.com",
             "transport": "session",
             "state": true
         },
@@ -60,12 +60,12 @@ const grantConfig =
             "key": process.env.TWITCH_KEY,
             "secret": process.env.TWITCH_SECRET,
             "scope": ["user_read"],
-            "callback": "https://localhost:3000/handle_twitch_callback"
+            "callback": "https://stream-gather.herokuapp.com/handle_twitch_callback"
         },
         "mixer": {
             "key": process.env.MIXER_KEY,
             "secret": process.env.MIXER_SECRET,
-            "callback": "http://localhost:3000/handle_mixer_callback"
+            "callback": "http://stream-gather.herokuapp.com/handle_mixer_callback"
         }
     }
 }
