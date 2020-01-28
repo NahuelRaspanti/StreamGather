@@ -16,7 +16,7 @@ class StreamGrid extends React.Component {
         if(this.state.user.length > 0){
             return this.user
         }
-        var user = await axios.get('http://localhost:5000/api/fetch_current_user',
+        var user = await axios.get('/api/fetch_current_user',
         {withCredentials: true});
 
         this.setState({user: user.data})
@@ -25,7 +25,7 @@ class StreamGrid extends React.Component {
     }
     
     getTwitchStreams = async () => {
-        const response = await axios.get('http://localhost:5000/api/get_twitch_streams',
+        const response = await axios.get('/api/get_twitch_streams',
         {withCredentials: true});
 
         var parsedData = response.data.streams.map(str => {
@@ -37,7 +37,7 @@ class StreamGrid extends React.Component {
     }
 
     getMixerStreams = async () => {
-        const response = await axios.get('http://localhost:5000/api/get_mixer_streams',
+        const response = await axios.get('/api/get_mixer_streams',
         {withCredentials: true});
 
         if(response.data.length === undefined) return {}

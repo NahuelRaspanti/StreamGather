@@ -65,7 +65,7 @@ const grantConfig =
         "mixer": {
             "key": process.env.MIXER_KEY,
             "secret": process.env.MIXER_SECRET,
-            "callback": "http://stream-gather.herokuapp.com/handle_mixer_callback"
+            "callback": "https://stream-gather.herokuapp.com/handle_mixer_callback"
         }
     }
 }
