@@ -8,7 +8,8 @@
     "debug": "concurrently -kill-others \"npm run client\" \"npm run svdebug\"",
     "client": "cd client && npm start",
     "server": "nodemon server.js",
-    "svdebug": "nodemon --inspect server.js"
+    "svdebug": "nodemon --inspect server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",
