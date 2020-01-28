@@ -218,10 +218,6 @@ app.get('/api/fetch_current_user', (req, res) => {
     res.send(req.session.user)
 });
 
-app.get('/', (req, res) => {
-    res.status(200).send('La API funciona correctamente');
-  });
-
 if (process.env.NODE_ENV === "production") {
     // serve production assets e.g. main.js if route exists
     app.use(express.static('client/build'));
