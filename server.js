@@ -222,6 +222,18 @@ app.get('/', (req, res) => {
     res.status(200).send('La API funciona correctamente');
   });
 
+if (process.env.NODE_ENV === "production") {
+    const path = require("path");
+
+    // serve production assets e.g. main.js if route exists
+    app.use(express.static(path.resolve(__dirname, "../client/build")));
+
+    // serve index.html if route is not recognized
+    app.get("*", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+    });
+}
+
 const PORT = process.env.PORT || 5000
 
 app.listen(PORT, function () {
