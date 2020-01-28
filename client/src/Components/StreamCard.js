@@ -1,7 +1,10 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
-import { Grid, Avatar, Typography, Box, Link } from '@material-ui/core';
+import { Grid, Avatar, Typography, Box, Link, SvgIcon } from '@material-ui/core';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import twitch from '../Images/twitch.jpg'
+import {ReactComponent as TwitchSVG} from '../Images/twitchsvg.svg'
+import {ReactComponent as MixerSVG} from '../Images/mixersvg.svg'
 
 const styles = {
     divBox: {
@@ -17,6 +20,13 @@ const styles = {
         borderBottomRightRadius: '4px',
         borderBottomLeftRadius: '4px'
     }
+}
+
+const providerIcon = (provider) => {
+    if(provider === 'twitch') {
+        return <TwitchSVG style = {{top: '12px', right: '8px', position: 'relative', display: 'block', backgroundSize: '40px 40px'}}></TwitchSVG>
+    }
+    return <MixerSVG style = {{top: '12px', right: '8px', position: 'relative', display: 'block', backgroundSize: '40px 40px'}}></MixerSVG>
 }
 
 const StreamCard = ({stream}) => {
@@ -41,6 +51,7 @@ const StreamCard = ({stream}) => {
                     <Typography variant = "caption" component = "p">{stream.streamerName}</Typography>
                     <Typography variant = "caption" component = "p">{stream.game}</Typography>
                 </div>
+                {providerIcon(stream.provider)}
             </div>
             </Link>
         </Card>

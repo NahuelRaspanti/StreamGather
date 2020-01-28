@@ -10,11 +10,16 @@ const StreamGridStyled = styled(Grid)({
   });
 
 class StreamGrid extends React.Component {
-    state = {streams: []};
+    state = {streams: [], user: []};
 
     getCurrentUser = async () => {
+        if(this.state.user.length > 0){
+            return this.user
+        }
         var user = await axios.get('http://localhost:5000/fetch_current_user',
         {withCredentials: true});
+
+        this.setState({user: user.data})
 
         return user.data;
     }
@@ -24,7 +29,7 @@ class StreamGrid extends React.Component {
         {withCredentials: true});
 
         var parsedData = response.data.streams.map(str => {
-            var streams = {image: str.preview.medium, avatar: str.channel.logo, streamerName: str.channel.display_name, game: str.channel.game, viewers: str.viewers, title: str.channel.status, url: str.channel.url};
+            var streams = {image: str.preview.medium, avatar: str.channel.logo, streamerName: str.channel.display_name, game: str.channel.game, viewers: str.viewers, title: str.channel.status, url: str.channel.url, provider: 'twitch'};
             return streams;
         })
 
@@ -37,7 +42,7 @@ class StreamGrid extends React.Component {
 
         if(response.data.length === undefined) return {}
         var parsedData = response.data.map(str => {
-            var streams = {image: 'https://thumbs.mixer.com/channel/'+ str.id +'.small.jpg', avatar: str.user.avatarUrl, streamerName: str.user.username, game: str.type.name, viewers: str.type.viewersCurrent, title: str.name, url: 'https://mixer.com/' + str.user.username};
+            var streams = {image: 'https://thumbs.mixer.com/channel/'+ str.id +'.small.jpg', avatar: str.user.avatarUrl, streamerName: str.user.username, game: str.type.name, viewers: str.viewersCurrent, title: str.name, url: 'https://mixer.com/' + str.user.username, provider: 'mixer'};
             return streams;
         })
 
@@ -47,6 +52,7 @@ class StreamGrid extends React.Component {
     componentDidMount = async () => {
         var twitchStreams = {}
         var mixerStreams = {}
+        var streams = {}
         var user = await this.getCurrentUser();
         if(user.twitchAccess)
         twitchStreams = await this.getTwitchStreams();
@@ -56,11 +62,15 @@ class StreamGrid extends React.Component {
         if(twitchStreams.length !== undefined || mixerStreams.length !== undefined)
         {
             if(mixerStreams.length > 0){
-                this.setState({streams: mixerStreams.concat(twitchStreams)});
+                streams =  mixerStreams.concat(twitchStreams)
             }
             else {
-                this.setState({streams: twitchStreams.concat(mixerStreams)});
+                streams = twitchStreams.concat(mixerStreams)
             }
+            streams.sort( (a, b) => {
+                return b.viewers - a.viewers
+            })
+            this.setState({streams: streams})
         }
         
     }

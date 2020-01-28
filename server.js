@@ -20,7 +20,7 @@ app.use(cors({
     credentials: true
 }));
 
-mongoose.connect('mongodb+srv://admin:jq9arryWKcbOyxdp@cluster0-nsozd.gcp.mongodb.net/test?retryWrites=true&w=majority');
+mongoose.connect(process.env.MONGO_DB);
 
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Client-ID'] = process.env.TWITCH_KEY;
@@ -28,26 +28,49 @@ axios.defaults.headers.post['Content-Type'] = 'application/vnd.twitchtv.v5+json'
 
 app.use(session({secret: 'grant', resave: false, saveUninitialized: false, cookie: {maxAge: 1000*60*60*24*30*12 }, store: new MongoStore({mongooseConnection: mongoose.connection})}));
 
-app.use(grant({
-    "defaults": {
-        "protocol": "http",
-        "host": "localhost:5000",
-        "transport": "session",
-        "state": true
+const grantConfig = 
+{
+    "development": {
+        "defaults": {
+            "protocol": "http",
+            "host": "localhost:5000",
+            "transport": "session",
+            "state": true
+        },
+        "twitch": {
+            "key": process.env.TWITCH_KEY,
+            "secret": process.env.TWITCH_SECRET,
+            "scope": ["user_read"],
+            "callback": "http://localhost:3000/handle_twitch_callback"
+        },
+        "mixer": {
+            "key": process.env.MIXER_KEY,
+            "secret": process.env.MIXER_SECRET,
+            "callback": "http://localhost:3000/handle_mixer_callback"
+        }
     },
-    "twitch": {
-        "key": process.env.TWITCH_KEY,
-        "secret": process.env.TWITCH_SECRET,
-        "scope": ["user_read"],
-        "callback": "http://localhost:3000/handle_twitch_callback"
-    },
-    "mixer": {
-        "key": process.env.MIXER_KEY,
-        "secret": process.env.MIXER_SECRET,
-        //"scope": ["user-read"],
-        "callback": "http://localhost:3000/handle_mixer_callback"
+    "production": {
+        "defaults": {
+            "protocol": "https",
+            "host": "localhost:5000",
+            "transport": "session",
+            "state": true
+        },
+        "twitch": {
+            "key": process.env.TWITCH_KEY,
+            "secret": process.env.TWITCH_SECRET,
+            "scope": ["user_read"],
+            "callback": "https://localhost:3000/handle_twitch_callback"
+        },
+        "mixer": {
+            "key": process.env.MIXER_KEY,
+            "secret": process.env.MIXER_SECRET,
+            "callback": "http://localhost:3000/handle_mixer_callback"
+        }
     }
-}));
+}
+
+app.use(grant(grantConfig[process.env.NODE_ENV || 'development']))
 
 app.get('/get_mixer_streams', async function (req, res) {
     try {
