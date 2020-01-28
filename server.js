@@ -52,7 +52,7 @@ const grantConfig =
     "production": {
         "defaults": {
             "protocol": "https",
-            "host": "stream-gather.herokuapp.com",
+            "host": "localhost:5000",
             "transport": "session",
             "state": true
         },
@@ -72,7 +72,7 @@ const grantConfig =
 
 app.use(grant(grantConfig[process.env.NODE_ENV || 'development']))
 
-app.get('/get_mixer_streams', async function (req, res) {
+app.get('/api/get_mixer_streams', async function (req, res) {
     try {
         await axios.get('https://mixer.com/api/v1/users/'+ req.session.user.mixerId +'/follows?where=online:eq:true')
         .then(response => {
@@ -87,7 +87,7 @@ app.get('/get_mixer_streams', async function (req, res) {
     }
 })
 
-app.get('/get_twitch_streams', async function (req, res) {
+app.get('/api/get_twitch_streams', async function (req, res) {
     try{
         await axios.get('https://api.twitch.tv/kraken/streams/followed',
              {headers : {'Authorization': 'OAuth ' + req.session.user.twitchAccess, 'Accept': 'application/vnd.twitchtv.v5+json'}})
@@ -214,7 +214,7 @@ const updateUser = async (id, sessionData, providerId, provider) => {
     return user;
 }
 
-app.get('/fetch_current_user', (req, res) => {
+app.get('/api/fetch_current_user', (req, res) => {
     res.send(req.session.user)
 });
 
