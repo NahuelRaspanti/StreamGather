@@ -60,12 +60,12 @@ const grantConfig =
             "key": process.env.TWITCH_KEY,
             "secret": process.env.TWITCH_SECRET,
             "scope": ["user_read"],
-            "callback": "https://stream-gather.herokuapp.com/handle_twitch_callback"
+            "callback": "https://stream-gather.herokuapp.com/api/handle_twitch_callback"
         },
         "mixer": {
             "key": process.env.MIXER_KEY,
             "secret": process.env.MIXER_SECRET,
-            "callback": "https://stream-gather.herokuapp.com/handle_mixer_callback"
+            "callback": "https://stream-gather.herokuapp.com/api/handle_mixer_callback"
         }
     }
 }
@@ -107,7 +107,7 @@ app.get('/api/get_twitch_streams', async function (req, res) {
     }
 });
 
-app.get('/handle_twitch_callback', async function (req, res) {
+app.get('/api/handle_twitch_callback', async function (req, res) {
     const { error, error_description, error_uri } = req.query
     if (error) {
         res.status(500).json({
@@ -141,7 +141,7 @@ app.get('/handle_twitch_callback', async function (req, res) {
     }
 });
 
-app.get('/handle_mixer_callback', async function (req, res) {
+app.get('/api/handle_mixer_callback', async function (req, res) {
     const { error, error_description, error_uri } = req.query
     if (error) {
         res.status(500).json({
