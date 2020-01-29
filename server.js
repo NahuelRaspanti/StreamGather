@@ -41,7 +41,7 @@ const grantConfig =
             "key": process.env.TWITCH_KEY,
             "secret": process.env.TWITCH_SECRET,
             "scope": ["user_read"],
-            "callback": "http://localhost:3000/handle_twitch_callback"
+            "callback": "http://localhost:5000/api/handle_twitch_callback"
         },
         "mixer": {
             "key": process.env.MIXER_KEY,
@@ -60,7 +60,7 @@ const grantConfig =
             "key": process.env.TWITCH_KEY,
             "secret": process.env.TWITCH_SECRET,
             "scope": ["user_read"],
-            "callback": "https://stream-gather.herokuapp.com/handle_twitch_callback"
+            "callback": "https://stream-gather.herokuapp.com/api/handle_twitch_callback"
         },
         "mixer": {
             "key": process.env.MIXER_KEY,
