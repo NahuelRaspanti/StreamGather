@@ -20,7 +20,9 @@ app.use(cors({
     credentials: true
 }));
 
-mongoose.connect(process.env.MONGO_DB);
+mongoose.connect(process.env.MONGO_DB)
+.then(() => console.log('MongoDB Connected...'))
+.catch(err => console.log(err));;
 
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Client-ID'] = process.env.TWITCH_KEY;
