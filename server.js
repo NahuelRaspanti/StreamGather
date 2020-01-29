@@ -52,7 +52,7 @@ const grantConfig =
     "production": {
         "defaults": {
             "protocol": "https",
-            "host": "https://stream-gather.herokuapp.com",
+            "host": "stream-gather.herokuapp.com",
             "transport": "session",
             "state": true
         },
