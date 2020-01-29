@@ -16,7 +16,7 @@ require('dotenv').config();
 var app = express();
 
 app.use(cors({
-    origin: process.env.NODE_ENV === 'prod' ? 'stream-gather.herokuapp.com' : 'http://localhost:3000',
+    origin: process.env.NODE_ENV === 'production' ? 'stream-gather.herokuapp.com' :'http://localhost:3000',
     credentials: true
 }));
 
@@ -33,7 +33,7 @@ const grantConfig =
     "development": {
         "defaults": {
             "protocol": "http",
-            "host": "localhost:5000",
+            "host": "localhost:3000",
             "transport": "session",
             "state": true
         },
@@ -41,12 +41,12 @@ const grantConfig =
             "key": process.env.TWITCH_KEY,
             "secret": process.env.TWITCH_SECRET,
             "scope": ["user_read"],
-            "callback": "http://localhost:5000/api/handle_twitch_callback"
+            "callback": "http://localhost:3000/api/handle_twitch_callback"
         },
         "mixer": {
             "key": process.env.MIXER_KEY,
             "secret": process.env.MIXER_SECRET,
-            "callback": "http://localhost:3000/handle_mixer_callback"
+            "callback": "/api/handle_mixer_callback"
         }
     },
     "production": {
@@ -70,7 +70,7 @@ const grantConfig =
     }
 }
 
-app.use(grant(grantConfig['production']))
+app.use(grant(grantConfig[process.env.NODE_ENV || 'development']))
 
 app.get('/api/get_mixer_streams', async function (req, res) {
     try {
@@ -218,7 +218,7 @@ app.get('/api/fetch_current_user', (req, res) => {
     res.send(req.session.user)
 });
 
-
+if(process.env.NODE_ENV === 'production'){
     // serve production assets e.g. main.js if route exists
     app.use(express.static('client/build'));
 
@@ -227,10 +227,11 @@ app.get('/api/fetch_current_user', (req, res) => {
     app.get("*", (req, res) => {
         res.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
     });
+}
 
 
 const PORT = process.env.PORT || 5000
 
 app.listen(PORT, function () {
-    console.log('server running on port : 5000');
+    console.log('server running on port : ' + PORT);
 });
