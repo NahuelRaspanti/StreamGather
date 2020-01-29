@@ -16,7 +16,7 @@ require('dotenv').config();
 var app = express();
 
 app.use(cors({
-    origin: process.env.NODE_ENV === 'prod' ? 'stream-gather.herokuapp.com' 'http://localhost:3000',
+    origin: process.env.NODE_ENV === 'prod' ? 'stream-gather.herokuapp.com' : 'http://localhost:3000',
     credentials: true
 }));
 
