@@ -67,10 +67,14 @@ class StreamGrid extends React.Component {
             else {
                 streams = twitchStreams.concat(mixerStreams)
             }
-            streams.sort( (a, b) => {
-                return b.viewers - a.viewers
+            var streamsOrdered = streams.filter(e => {
+                return Object.keys(e).length !== 0
             })
-            this.setState({streams: streams})
+            .sort((a, b) => {
+                return b.viewers - a.viewers 
+            })
+
+            this.setState({streams: streamsOrdered})
         }
         
     }
@@ -80,7 +84,9 @@ class StreamGrid extends React.Component {
             return <StreamCard key={stream._id} stream = {stream}></StreamCard>
         });
         return (
-            <StreamGridStyled container spacing={3} xs={12}>{streams}</StreamGridStyled>
+            <div style = {{padding: '5px'}}>
+            <StreamGridStyled container  spacing={1}>{streams}</StreamGridStyled>
+            </div>
         )
     }
 }

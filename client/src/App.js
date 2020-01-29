@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import ButtonList from './Components/ButtonList';
 import StreamGrid from './Components/StreamGrid';

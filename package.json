@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "debug": "concurrently -kill-others \"npm run client\" \"npm run svdebug\"",
+    "debug": "concurrently -kill-others \"npm run client\" \"npm run server\"",
     "client": "npm run start --prefix client",
     "server": "nodemon server.js",
     "svdebug": "nodemon --inspect server.js",

@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
-import { Grid, Avatar, Typography, Box, Link, SvgIcon } from '@material-ui/core';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { Grid, Avatar, Typography, Box, Link } from '@material-ui/core';
 import {ReactComponent as TwitchSVG} from '../Images/twitchsvg.svg'
 import {ReactComponent as MixerSVG} from '../Images/mixersvg.svg'
 
@@ -30,11 +29,11 @@ const providerIcon = (provider) => {
 
 const StreamCard = ({stream}) => {
     return(
-    <Grid item xs = {3} >
+    <Grid item xs = {3} xl = {3} >
         <Card>
             <Link href = {stream.url} target = "_blank" color="inherit" style={{textDecoration: 'none'}}>
             <div style = {{position: 'relative'}}>
-                <img src = {stream.image} style = {{width: '100%', height: 'auto', verticalAlign: 'middle'}}></img>
+                <img alt = {[`${stream.streamerName} image`]} src = {stream.image} style = {{width: '100%', height: 'auto', verticalAlign: 'middle'}}></img>
                 <div style = {styles.divBox}>
                     <span style = {{color: 'white'}}>{stream.viewers} viewers</span>
                 </div>
@@ -47,8 +46,8 @@ const StreamCard = ({stream}) => {
                             {stream.title}
                         </Box>
                     </Typography>
-                    <Typography variant = "caption" component = "p">{stream.streamerName}</Typography>
-                    <Typography variant = "caption" component = "p">{stream.game}</Typography>
+                    <Typography variant = "caption" component = "p" noWrap>{stream.streamerName}</Typography>
+                    <Typography variant = "caption" component = "p" noWrap>{stream.game}</Typography>
                 </div>
                 {providerIcon(stream.provider)}
             </div>
