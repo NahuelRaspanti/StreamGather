@@ -60,7 +60,7 @@ const grantConfig =
             "key": process.env.TWITCH_KEY,
             "secret": process.env.TWITCH_SECRET,
             "scope": ["user_read"],
-            "callback": "https://stream-gather.herokuapp.com/api/handle_twitch_callback"
+            "callback": "https://stream-gather.herokuapp.com/handle_twitch_callback"
         },
         "mixer": {
             "key": process.env.MIXER_KEY,
@@ -218,7 +218,7 @@ app.get('/api/fetch_current_user', (req, res) => {
     res.send(req.session.user)
 });
 
-if (process.env.NODE_ENV === "production") {
+
     // serve production assets e.g. main.js if route exists
     app.use(express.static('client/build'));
 
@@ -227,7 +227,7 @@ if (process.env.NODE_ENV === "production") {
     app.get("*", (req, res) => {
         res.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
     });
-}
+
 
 const PORT = process.env.PORT || 5000
 
