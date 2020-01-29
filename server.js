@@ -70,7 +70,7 @@ const grantConfig =
     }
 }
 
-app.use(grant(grantConfig[process.env.NODE_ENV || 'development']))
+app.use(grant(grantConfig['production']))
 
 app.get('/api/get_mixer_streams', async function (req, res) {
     try {
