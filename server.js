@@ -48,7 +48,7 @@ const grantConfig =
         "mixer": {
             "key": process.env.MIXER_KEY,
             "secret": process.env.MIXER_SECRET,
-            "callback": "/api/handle_mixer_callback"
+            "callback": "http://localhost:3000/api/handle_mixer_callback"
         }
     },
     "production": {
@@ -159,7 +159,7 @@ app.get('/api/handle_mixer_callback', async function (req, res) {
         })
         .then(async resp => {
             user = await findUser(resp.data.id, 'mixer')
-            if(req.session.user._id === undefined || user){
+            if(req.session.user || user){
                 var id = req.session.user._id ? req.session.user._id : user.id
                 var user = await updateUser(req.session.user._id, req.session.grant.response, resp.data.id, 'mixer')
             }
