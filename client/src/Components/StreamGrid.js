@@ -3,6 +3,9 @@ import axios from 'axios';
 import StreamCard from './StreamCard'
 import Grid from '@material-ui/core/Grid'
 import { styled } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { fetchUser } from '../actions';
+import _ from 'lodash';
 
 
 const StreamGridStyled = styled(Grid)({
@@ -10,9 +13,9 @@ const StreamGridStyled = styled(Grid)({
   });
 
 class StreamGrid extends React.Component {
-    state = {streams: [], user: []};
+    state = {streams: []};
 
-    getCurrentUser = async () => {
+    /*getCurrentUser = async () => {
         if(this.state.user.length > 0){
             return this.user
         }
@@ -22,7 +25,7 @@ class StreamGrid extends React.Component {
         this.setState({user: user.data})
 
         return user.data;
-    }
+    }*/
     
     getTwitchStreams = async () => {
         const response = await axios.get('/api/get_twitch_streams',
@@ -50,16 +53,21 @@ class StreamGrid extends React.Component {
     }
 
     componentDidMount = async () => {
+        await this.props.fetchUser();
         var twitchStreams = {}
         var mixerStreams = {}
-        var streams = {}
-        var user = await this.getCurrentUser();
-        if(user.twitchAccess)
+        //var user = await this.getCurrentUser();
+        if(this.props.user.twitchAccess)
         twitchStreams = await this.getTwitchStreams();
-        if(user.mixerAccess)
+        if(this.props.user.mixerAccess)
         mixerStreams = await this.getMixerStreams();
 
-        if(twitchStreams.length !== undefined || mixerStreams.length !== undefined)
+        var streams = _.mergeWith(twitchStreams, mixerStreams);
+        var streamsOrdered = _.orderBy(streams, 'viewers', "desc");
+
+        this.setState({streams: streamsOrdered});
+
+        /*if(twitchStreams.length !== undefined || mixerStreams.length !== undefined)
         {
             if(mixerStreams.length > 0){
                 streams =  mixerStreams.concat(twitchStreams)
@@ -75,7 +83,7 @@ class StreamGrid extends React.Component {
             })
 
             this.setState({streams: streamsOrdered})
-        }
+        } */
         
     }
 
@@ -91,4 +99,11 @@ class StreamGrid extends React.Component {
     }
 }
 
-export default StreamGrid;
+const mapStateToProps = state => {
+    return { user: state.user }
+}
+
+export default connect(
+    mapStateToProps,
+    { fetchUser }
+)(StreamGrid);
