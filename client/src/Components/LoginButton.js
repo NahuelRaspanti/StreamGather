@@ -8,13 +8,16 @@ const LoginButton = ({app, user}) => {
     const render = () => {
         if(userProfile) {
             return (
-                <a className = "btn">
-                    <div>
+                <div style = {{width: '100%', display: 'flex', padding: '8px', alignItems: 'center'}}>
+                    <div style = {{position: 'relative', display: 'block'}}>
                         <Avatar src = {userProfile.avatarUrl}></Avatar>
                     </div>
-                    {userProfile.username}
-                    Logout
-                </a>
+                    <div>
+                        <Typography>{userProfile.username}</Typography>
+                        <Typography>{name}</Typography>
+                        <Typography>Logout</Typography>
+                    </div>
+                </div>
             )
         }
         else {
