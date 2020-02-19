@@ -16,10 +16,11 @@ class App extends React.Component {
     <div className="App">
     <CssBaseline/>
     <h2>Stream Gather</h2>
-    <h1><ButtonList></ButtonList></h1>
+    <h1><ButtonList
+          user = {this.props.user}
+        ></ButtonList></h1>
       <div>
         <StreamGrid
-          user = {this.props.user}
           streams = {this.props.streams}
         ></StreamGrid>
       </div>

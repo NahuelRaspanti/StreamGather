@@ -12,8 +12,7 @@ export const fetchStreams = () => async dispatch => {
     var twitchStreams = await fetchTwitchStreams();
     var mixerStreams = await fetchMixerStreams();
 
-    var streams = _.mergeWith(twitchStreams, mixerStreams);
-    var streamsOrdered = _.orderBy(streams, 'viewers', "desc");
+    var streamsOrdered = _(twitchStreams).concat(mixerStreams).filter(_.size).orderBy('viewers', "desc").value();
 
     dispatch({ type: 'FETCH_STREAMS', payload: streamsOrdered});
 }

@@ -176,7 +176,7 @@ app.get('/api/handle_mixer_callback', async function (req, res) {
 });
 
 const refreshTwitchToken = async (twitchId, twitchRefresh) => {
-    await axios.post('https://id.twitch.tv/oauth2/token', {
+    return await axios.post('https://id.twitch.tv/oauth2/token', '', {
         params: {
             grant_type: "refresh_token",
             refresh_token: twitchRefresh,
@@ -193,13 +193,50 @@ const refreshTwitchToken = async (twitchId, twitchRefresh) => {
     })
 }
 
+const refreshMixerToken = async (mixerId, mixerRefresh) => {
+    var instance = axios.create({
+        baseURL: 'https://mixer.com',
+        headers: {'Accept': '*/*', 'Content-Type': 'application/json; charset=utf-8'}
+    })
+
+    return await instance.post('/api/v1/oauth/token', {
+            grant_type: "refresh_token",
+            refresh_token: mixerRefresh,
+            client_id: process.env.MIXER_KEY,
+            client_secret: process.env.MIXER_SECRET
+    }, '')
+    .then(async response => {
+        var refreshedUser = await refreshAccessToken(response.data, mixerId)
+        return refreshedUser
+    })
+    .catch(err => {
+        console.log(err);
+    })
+}
+
 const refreshAccessToken = async (data, id) => {
-    var user = User.findByIdAndUpdate({_id: id}, {twitchAccess: data.access_token, twitchRefresh: data.refresh_token}, {new: true}).exec()
+    var user = User
+    .findByIdAndUpdate({_id: id}, {twitchAccess: data.access_token, twitchRefresh: data.refresh_token}, {new: true})
+    .exec()
+    .then(user => {
+        return user;
+    })
+    .catch(err => {
+        console.log(err);
+    })
     return user;
 }
 
 const findUser = async (providerId, provider) => {
-    var user = User.findOne({[`${provider}Id`]: providerId}).exec()
+    var user = User
+    .findOne({[`${provider}Id`]: providerId})
+    .exec()
+    .then(user => {
+        return user;
+    })
+    .catch(err => {
+        console.log(err);
+    })
     return user;
 }
 
@@ -217,14 +254,15 @@ const updateUser = async (id, sessionData, providerId, provider) => {
 }
 
 app.get('/api/fetch_current_user', async (req, res) => {
-    const twitchUser = req.session.user.twitchId ? await fetchTwitchUser(req.session.user.twitchAccess) : {};
-    const mixerUser = req.session.user.mixerId ? await fetchMixerUser(req.session.user.mixerAccess) : {};
+    const userVar = req.session.user;
+    const mixerUser = req.session.user.mixerId ? await fetchMixerUser(req, userVar.mixerAccess, userVar._id, userVar.mixerRefresh) : {};
+    const twitchUser = req.session.user.twitchId ? await fetchTwitchUser(req, userVar.twitchAccess, userVar._id, userVar.twitchRefresh) : {};
     var user = [req.session.user, twitchUser, mixerUser];
     res.send(user);
 });
 
 
-const fetchTwitchUser = async access => {
+const fetchTwitchUser = async (req, access, userId, refresh) => {
     return await axios.get('https://api.twitch.tv/kraken/user', {
         headers: {
             'Accept': 'application/vnd.twitchtv.v5+json',
@@ -234,10 +272,18 @@ const fetchTwitchUser = async access => {
     })
     .then(response => {
         return response.data;
-    });
+    })
+    .catch(async err => {
+        if(err.response.status === 401 && err.response.statusText === "Unauthorized"){
+            var refreshedUser = await refreshTwitchToken(userId, refresh)
+            if (refreshedUser === undefined) return;
+            req.session.user = refreshedUser;
+            return twitchUser = await fetchTwitchUser(req, refreshedUser.twitchAccess, userId, refreshedUser.twitchRefresh);
+        }
+    })
 }
 
-const fetchMixerUser = async access => {
+const fetchMixerUser = async (req, access, userId, refresh) => {
     return await axios.get('https://mixer.com/api/v1/users/current', {
             headers: {
                 'Authorization': 'Bearer ' + access
@@ -245,6 +291,14 @@ const fetchMixerUser = async access => {
     })
     .then(response => {
         return response.data;
+    })
+    .catch(async err => {
+        if(err.response.status === 401 && err.response.statusText === "Unauthorized") {
+            const refreshedUser = await refreshMixerToken(userId, refresh)
+            if(refreshedUser === undefined) return;
+            req.session.user = refreshedUser;
+            return mixerUser = await fetchMixerUser(req, refreshedUser.twitchAccess, userId, refreshedUser.twitchRefresh);
+        }
     })
 }
 
