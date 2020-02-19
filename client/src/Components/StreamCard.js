@@ -29,7 +29,7 @@ const providerIcon = (provider) => {
 
 const StreamCard = ({stream}) => {
     return(
-    <Grid item xs = {3} xl = {2} >
+    <Grid item xs = {12} xl = {2} >
         <Card style = {{maxWidth: '320px'}}>
             <Link href = {stream.url} target = "_blank" color="inherit" style={{textDecoration: 'none'}}>
             <div style = {{position: 'relative'}}>
