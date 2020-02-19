@@ -22,15 +22,15 @@ const styles = {
 
 const providerIcon = (provider) => {
     if(provider === 'twitch') {
-        return <TwitchSVG style = {{top: '12px', right: '8px', position: 'relative', display: 'block', backgroundSize: '40px 40px'}}></TwitchSVG>
+        return <TwitchSVG style = {{top: '12px', right: '8px', position: 'relative', display: 'block', backgroundSize: '30px 30px'}}></TwitchSVG>
     }
-    return <MixerSVG style = {{top: '12px', right: '8px', position: 'relative', display: 'block', backgroundSize: '40px 40px'}}></MixerSVG>
+    return <MixerSVG style = {{top: '12px', right: '8px', position: 'relative', display: 'block', backgroundSize: '30px 30px'}}></MixerSVG>
 }
 
 const StreamCard = ({stream}) => {
     return(
-    <Grid item xs = {3} xl = {3} >
-        <Card>
+    <Grid item xs = {3} xl = {2} >
+        <Card style = {{maxWidth: '320px'}}>
             <Link href = {stream.url} target = "_blank" color="inherit" style={{textDecoration: 'none'}}>
             <div style = {{position: 'relative'}}>
                 <img alt = {[`${stream.streamerName} image`]} src = {stream.image} style = {{width: '100%', height: 'auto', verticalAlign: 'middle'}}></img>
@@ -38,10 +38,10 @@ const StreamCard = ({stream}) => {
                     <span style = {{color: 'white'}}>{stream.viewers} viewers</span>
                 </div>
             </div>
-            <div style = {{padding: '16px', alignItems: 'center', display: 'flex', flexGrow: '1'}}>
-                <Avatar alt={"Avatar"} src={stream.avatar} style={{position: 'relative', display: 'block', width: '52px', height: '52px'}}></Avatar>
+            <div style = {{padding: '8px', alignItems: 'center', display: 'flex', flexGrow: '1'}}>
+                <Avatar alt={"Avatar"} src={stream.avatar} style={{position: 'relative', display: 'block', width: '38px', height: '38px'}}></Avatar>
                 <div style = {{width: '0px', marginLeft: '8px', flexGrow: '1', textAlign: 'left'}}>
-                    <Typography variant = "subtitle1" component = "div">
+                    <Typography variant = "subtitle1" component = "div" style = {{fontSize: '0.9rem'}}>
                         <Box fontWeight = "fontWeightBold" textOverflow="ellipsis" overflow="hidden" whiteSpace="noWrap">
                             {stream.title}
                         </Box>

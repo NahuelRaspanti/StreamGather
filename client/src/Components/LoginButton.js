@@ -1,4 +1,5 @@
 import React from 'react';
+import { Avatar, Typography } from '@material-ui/core';
 
 const LoginButton = ({app, user}) => {
     const {name, href, text, color} = app;
@@ -8,6 +9,10 @@ const LoginButton = ({app, user}) => {
         if(userProfile) {
             return (
                 <a className = "btn">
+                    <div>
+                        <Avatar src = {userProfile.avatarUrl}></Avatar>
+                    </div>
+                    {userProfile.username}
                     Logout
                 </a>
             )
