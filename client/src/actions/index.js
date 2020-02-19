@@ -21,6 +21,8 @@ const fetchTwitchStreams = async () => {
     const response = await axios.get('/api/get_twitch_streams',
     {withCredentials: true});
 
+    if(_.isEmpty(response.data)) return []
+
     var parsedData = response.data.streams.map(str => {
         var streams = {id: str._id, image: str.preview.medium, avatar: str.channel.logo, streamerName: str.channel.display_name, game: str.channel.game, viewers: str.viewers, title: str.channel.status, url: str.channel.url, provider: 'twitch'};
         return streams;
@@ -32,6 +34,8 @@ const fetchTwitchStreams = async () => {
 const fetchMixerStreams = async () => {
     const response = await axios.get('/api/get_mixer_streams',
     {withCredentials: true});
+
+    if(_.isEmpty(response.data)) return []
 
     var parsedData = response.data.map(str => {
         var streams = {id: str.id, image: 'https://thumbs.mixer.com/channel/'+ str.id +'.small.jpg', avatar: str.user.avatarUrl, streamerName: str.user.username, game: str.type.name, viewers: str.viewersCurrent, title: str.name, url: 'https://mixer.com/' + str.user.username, provider: 'mixer'};

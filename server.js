@@ -255,12 +255,16 @@ const updateUser = async (id, sessionData, providerId, provider) => {
 
 app.get('/api/fetch_current_user', async (req, res) => {
     const userVar = req.session.user;
+    if(userVar === undefined) {
+        res.send({});
+        return;
+    } 
     const mixerUser = req.session.user.mixerId ? await fetchMixerUser(req, userVar.mixerAccess, userVar._id, userVar.mixerRefresh) : {};
     const twitchUser = req.session.user.twitchId ? await fetchTwitchUser(req, userVar.twitchAccess, userVar._id, userVar.twitchRefresh) : {};
     newMixer = { username: mixerUser.username, avatarUrl: mixerUser.avatarUrl};
     newTwitch =  {username: twitchUser.display_name, avatarUrl: twitchUser.logo};
 
-    var user = [req.session.user, newMixer, newTwitch];
+    var user = [req.session.user, newTwitch, newMixer];
     res.send(user);
 });
 

@@ -1,12 +1,24 @@
 import React from 'react';
 import { Avatar, Typography } from '@material-ui/core';
+import _ from 'lodash'
 
 const LoginButton = ({app, user}) => {
     const {name, href, text, color} = app;
     const userProfile = name === "Twitch" ? user[1] : user[2];
 
+    const shouldShowProfile = () => {
+        var usr = user[0];
+        if(_.isEmpty(usr)) return false;
+        if(name === 'Twitch') {
+            return usr.twitchId === undefined ? false : true;
+        }
+        else {
+            return usr.mixerId === undefined ? false : true;
+        }
+    }
+
     const render = () => {
-        if(userProfile) {
+        if(shouldShowProfile()) {
             return (
                 <div style = {{width: '100%', display: 'flex', padding: '8px', alignItems: 'center'}}>
                     <div style = {{position: 'relative', display: 'block'}}>
