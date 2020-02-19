@@ -4,6 +4,7 @@ const LoginButton = ({app}) => {
     const {name, href, text, color} = app;
     
     return (
+        <div style= {{width: '25%'}}>
         <a className = "btn login-btn"
             href = {href}
             title = {name}
@@ -11,6 +12,10 @@ const LoginButton = ({app}) => {
         >
             <span>{text}</span>
         </a>
+        <a className = "btn">
+            Logout
+        </a>
+        </div>
     )
 }
 

@@ -216,9 +216,37 @@ const updateUser = async (id, sessionData, providerId, provider) => {
     return user;
 }
 
-app.get('/api/fetch_current_user', (req, res) => {
-    res.send(req.session.user)
+app.get('/api/fetch_current_user', async (req, res) => {
+    const twitchUser = req.session.user.twitchId ? await fetchTwitchUser(req.session.user.twitchAccess) : {};
+    const mixerUser = req.session.user.mixerId ? await fetchMixerUser(req.session.user.mixerAccess) : {};
+    var user = [req.session.user, twitchUser, mixerUser];
+    res.send(user);
 });
+
+
+const fetchTwitchUser = async access => {
+    return await axios.get('https://api.twitch.tv/kraken/user', {
+        headers: {
+            'Accept': 'application/vnd.twitchtv.v5+json',
+            'Client-ID': process.env.TWITCH_KEY,
+            'Authorization': 'OAuth ' + access
+        }
+    })
+    .then(response => {
+        return response.data;
+    });
+}
+
+const fetchMixerUser = async access => {
+    return await axios.get('https://mixer.com/api/v1/users/current', {
+            headers: {
+                'Authorization': 'Bearer ' + access
+            }
+    })
+    .then(response => {
+        return response.data;
+    })
+}
 
 if(process.env.NODE_ENV === 'production'){
     // serve production assets e.g. main.js if route exists

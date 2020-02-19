@@ -1,6 +1,6 @@
-export default (state = {}, action) => {
+export default (state = [], action) => {
     switch(action.type) {
-        case 'FETCH_USER':
+        case 'FETCH_STREAMS':
             return action.payload;
         default: 
             return state;

@@ -1,11 +1,7 @@
 import React from 'react';
-import axios from 'axios';
 import StreamCard from './StreamCard'
 import Grid from '@material-ui/core/Grid'
 import { styled } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
-import { fetchUser } from '../actions';
-import _ from 'lodash';
 
 
 const StreamGridStyled = styled(Grid)({
@@ -13,97 +9,18 @@ const StreamGridStyled = styled(Grid)({
   });
 
 class StreamGrid extends React.Component {
-    state = {streams: []};
-
-    /*getCurrentUser = async () => {
-        if(this.state.user.length > 0){
-            return this.user
-        }
-        var user = await axios.get('/api/fetch_current_user',
-        {withCredentials: true});
-
-        this.setState({user: user.data})
-
-        return user.data;
-    }*/
-    
-    getTwitchStreams = async () => {
-        const response = await axios.get('/api/get_twitch_streams',
-        {withCredentials: true});
-
-        var parsedData = response.data.streams.map(str => {
-            var streams = {image: str.preview.medium, avatar: str.channel.logo, streamerName: str.channel.display_name, game: str.channel.game, viewers: str.viewers, title: str.channel.status, url: str.channel.url, provider: 'twitch'};
-            return streams;
-        })
-
-        return parsedData;
-    }
-
-    getMixerStreams = async () => {
-        const response = await axios.get('/api/get_mixer_streams',
-        {withCredentials: true});
-
-        if(response.data.length === undefined) return {}
-        var parsedData = response.data.map(str => {
-            var streams = {image: 'https://thumbs.mixer.com/channel/'+ str.id +'.small.jpg', avatar: str.user.avatarUrl, streamerName: str.user.username, game: str.type.name, viewers: str.viewersCurrent, title: str.name, url: 'https://mixer.com/' + str.user.username, provider: 'mixer'};
-            return streams;
-        })
-
-        return parsedData;
-    }
-
-    componentDidMount = async () => {
-        await this.props.fetchUser();
-        var twitchStreams = {}
-        var mixerStreams = {}
-        //var user = await this.getCurrentUser();
-        if(this.props.user.twitchAccess)
-        twitchStreams = await this.getTwitchStreams();
-        if(this.props.user.mixerAccess)
-        mixerStreams = await this.getMixerStreams();
-
-        var streams = _.mergeWith(twitchStreams, mixerStreams);
-        var streamsOrdered = _.orderBy(streams, 'viewers', "desc");
-
-        this.setState({streams: streamsOrdered});
-
-        /*if(twitchStreams.length !== undefined || mixerStreams.length !== undefined)
-        {
-            if(mixerStreams.length > 0){
-                streams =  mixerStreams.concat(twitchStreams)
-            }
-            else {
-                streams = twitchStreams.concat(mixerStreams)
-            }
-            var streamsOrdered = streams.filter(e => {
-                return Object.keys(e).length !== 0
-            })
-            .sort((a, b) => {
-                return b.viewers - a.viewers 
-            })
-
-            this.setState({streams: streamsOrdered})
-        } */
-        
-    }
-
     render() {
-        const streams = this.state.streams.map(stream => {
-            return <StreamCard key={stream._id} stream = {stream}></StreamCard>
+        const {streams} = this.props;
+
+        const strs = streams.map(stream => {
+            return <StreamCard key={stream.id} stream = {stream}></StreamCard>
         });
         return (
             <div style = {{padding: '5px'}}>
-            <StreamGridStyled container  spacing={1}>{streams}</StreamGridStyled>
+            <StreamGridStyled container spacing={1}>{strs}</StreamGridStyled>
             </div>
         )
     }
 }
 
-const mapStateToProps = state => {
-    return { user: state.user }
-}
-
-export default connect(
-    mapStateToProps,
-    { fetchUser }
-)(StreamGrid);
+export default StreamGrid

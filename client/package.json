@@ -14,10 +14,7 @@
     "lodash": "^4.17.15",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-<<<<<<< HEAD
     "react-redux": "^7.1.3",
-=======
->>>>>>> 3c9ec6719925bee349b93d2e070d1f39a3811133
     "react-scripts": "3.3.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"
