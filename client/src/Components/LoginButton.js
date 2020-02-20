@@ -10,10 +10,10 @@ const LoginButton = ({app, user}) => {
         var usr = user[0];
         if(_.isEmpty(usr)) return false;
         if(name === 'Twitch') {
-            return usr.twitchId === undefined ? false : true;
+            return usr.twitchId === null ? false : true;
         }
         else {
-            return usr.mixerId === undefined ? false : true;
+            return usr.mixerId === null ? false : true;
         }
     }
 
