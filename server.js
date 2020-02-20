@@ -185,7 +185,7 @@ const refreshTwitchToken = async (twitchId, twitchRefresh) => {
         }
     })
     .then(async response => {
-        var refreshedUser = await refreshAccessToken(response.data, twitchId)
+        var refreshedUser = await refreshAccessToken(response.data, twitchId, 'twitch')
         return refreshedUser
     })
     .catch(err => {
@@ -206,7 +206,7 @@ const refreshMixerToken = async (mixerId, mixerRefresh) => {
             client_secret: process.env.MIXER_SECRET
     }, '')
     .then(async response => {
-        var refreshedUser = await refreshAccessToken(response.data, mixerId)
+        var refreshedUser = await refreshAccessToken(response.data, mixerId, 'mixer')
         return refreshedUser
     })
     .catch(err => {
@@ -214,9 +214,9 @@ const refreshMixerToken = async (mixerId, mixerRefresh) => {
     })
 }
 
-const refreshAccessToken = async (data, id) => {
+const refreshAccessToken = async (data, id, provider) => {
     var user = User
-    .findByIdAndUpdate({_id: id}, {twitchAccess: data.access_token, twitchRefresh: data.refresh_token}, {new: true})
+    .findByIdAndUpdate({_id: id}, {[`${provider}Access`]: data.access_token, [`${provider}Refresh`]: data.refresh_token}, {new: true})
     .exec()
     .then(user => {
         return user;

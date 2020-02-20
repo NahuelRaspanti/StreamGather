@@ -5,7 +5,8 @@ import { styled } from '@material-ui/core/styles';
 
 
 const StreamGridStyled = styled(Grid)({
-    height: 'auto'
+    height: 'auto',
+    display: 'flex'
   });
 
 class StreamGrid extends React.Component {

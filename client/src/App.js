@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import ButtonList from './Components/ButtonList';
 import StreamGrid from './Components/StreamGrid';
+import StreamDrawer from './Components/Drawer'
 import { CssBaseline } from '@material-ui/core';
 
 class App extends React.Component {
@@ -19,11 +20,10 @@ class App extends React.Component {
     <h1><ButtonList
           user = {this.props.user}
         ></ButtonList></h1>
-      <div>
-        <StreamGrid
-          streams = {this.props.streams}
-        ></StreamGrid>
-      </div>
+    <StreamDrawer 
+      streams = {this.props.streams}
+    ></StreamDrawer>
+
     </div>
     
     );
