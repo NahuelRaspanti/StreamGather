@@ -20,8 +20,8 @@ const LoginButton = ({app, user}) => {
     const render = () => {
         if(shouldShowProfile()) {
             return (
-                <div style = {{width: '100%', display: 'flex', padding: '8px', alignItems: 'center'}}>
-                    <div style = {{position: 'relative', display: 'block'}}>
+                <div style = {{width: '250px', display: 'inline-flex', padding: '8px', alignItems: 'center'}}>
+                    <div style = {{position: 'relative', display: 'block', padding: '16px'}}>
                         <Avatar src = {userProfile.avatarUrl}></Avatar>
                     </div>
                     <div>
@@ -37,7 +37,7 @@ const LoginButton = ({app, user}) => {
                 <a className = "btn login-btn"
                     href = {href}
                     title = {name}
-                    style={{ backgroundColor: color, margin: 5, display: "block" }}>
+                    style={{ backgroundColor: color, margin: 5, display: "inline-flex", maxWidth: 'fit-content'}}>
                     <span>{text}</span>
                 </a>
                 )

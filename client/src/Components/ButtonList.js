@@ -12,9 +12,7 @@ const Buttons = (user) => {
 
 const ButtonList = (user) => {
     return (
-        <div style = {{ textAlign: 'center', display: 'inline-flex'}}>
             <Buttons user = {user.user}></Buttons>
-        </div>
     )
 };
 
