@@ -17,7 +17,7 @@ class StreamGrid extends React.Component {
             return <StreamCard key={stream.id} stream = {stream}></StreamCard>
         });
         return (
-            <div style = {{padding: '5px'}}>
+            <div style = {{padding: '5px', width: '100%'}}>
             <StreamGridStyled container spacing={1}>{strs}</StreamGridStyled>
             </div>
         )
