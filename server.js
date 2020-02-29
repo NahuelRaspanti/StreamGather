@@ -76,33 +76,48 @@ app.use(grant(grantConfig[process.env.NODE_ENV || 'development']))
 
 app.get('/api/get_mixer_streams', async function (req, res) {
     try {
-        await axios.get('https://mixer.com/api/v1/users/'+ req.session.user.mixerId +'/follows?where=online:eq:true')
-        .then(response => {
-            res.send(response.data)
-        })
-        .catch(error => {
-            res.send(error.response)
-        })
+        if(req.session.user.mixerId !== null) {
+            await axios.get('https://mixer.com/api/v1/users/'+ req.session.user.mixerId +'/follows?where=online:eq:true')
+            .then(response => {
+                return res.send(response.data)
+            })
+            .catch(async error => {
+                if(error.response.status === 401 && error.response.statusText === "Unauthorized"){
+                    var refreshedUser = await refreshTwitchToken(req.session.user.mixerId, req.session.user.mixerRefresh)
+                    req.session.user = refreshedUser
+                    return res.redirect('/get_mixer_streams')
+                }
+            })
+        }
+        else {
+            return res.send({});
+        }
     }
     catch (err){
-        res.send(err);
+        console.log(err)
     }
 })
 
 app.get('/api/get_twitch_streams', async function (req, res) {
     try{
-        await axios.get('https://api.twitch.tv/kraken/streams/followed',
-             {headers : {'Authorization': 'OAuth ' + req.session.user.twitchAccess, 'Accept': 'application/vnd.twitchtv.v5+json'}})
-            .then(response => {
-                res.send(response.data)
-            })
-            .catch(async error => { //Manejar el 401 Unauthorized para refreshear el token y guardar el nuevo
-                if(error.response.status === 401 && error.response.statusText === "Unauthorized"){
-                    var refreshedUser = await refreshTwitchToken(req.session.user.twitchId, req.session.user.twitchRefresh)
-                    req.session.user = refreshedUser
-                    res.redirect('/get_twitch_streams')
-                }
+        if(req.session.user.twitchId !== null) {
+            await axios.get('https://api.twitch.tv/kraken/streams/followed',
+                 {headers : {'Authorization': 'OAuth ' + req.session.user.twitchAccess, 'Accept': 'application/vnd.twitchtv.v5+json'}})
+                .then(response => {
+                    return res.send(response.data)
+                })
+                .catch(async error => { //Manejar el 401 Unauthorized para refreshear el token y guardar el nuevo
+                    if(error.response.status === 401 && error.response.statusText === "Unauthorized"){
+                        var refreshedUser = await refreshTwitchToken(req.session.user.twitchId, req.session.user.twitchRefresh)
+                        req.session.user = refreshedUser
+                        return res.redirect('/get_twitch_streams')
+                    }
             });
+        }
+        else {
+            return res.send({});
+        }
+        
     }
     catch(err){
         console.error("pete", err);
@@ -128,14 +143,14 @@ app.get('/api/handle_twitch_callback', async function (req, res) {
         .then(async resp => {
             user = await findUser(resp.data._id, 'twitch')
             if(req.session.user || user){
-                var id =  user.id || req.session.user._id
+                var id =  user === null ? req.session.user._id : user.id
                 var user = await updateUser(id, req.session.grant.response, resp.data._id, 'twitch')
             }
             else{
                 var user = createUser(resp.data._id, req.session.grant.response, 'twitch')
             }      
             req.session.user = user
-            res.redirect("/");
+            return res.redirect("/");
         })
         .catch(err => {
             res.end(err);
@@ -160,18 +175,43 @@ app.get('/api/handle_mixer_callback', async function (req, res) {
         .then(async resp => {
             user = await findUser(resp.data.id, 'mixer')
             if(req.session.user || user){
-                var id = req.session.user._id ? req.session.user._id : user.id
-                var user = await updateUser(req.session.user._id, req.session.grant.response, resp.data.id, 'mixer')
+                var id =  user === null ? req.session.user._id : user.id
+                var user = await updateUser(id, req.session.grant.response, resp.data.id, 'mixer')
             }
             else{
                 var user = createUser(resp.data.id, req.session.grant.response, 'mixer')
             }      
             req.session.user = user
-            res.redirect("/");
+            return res.redirect("/");
         })
         .catch(err => {
             res.end(err);
         })
+    }
+});
+
+app.post('/api/logout/:provider', (req, res) => {
+    try{
+        const provider = req.params.provider
+        req.session.user[`${provider}Id`] = null
+        req.session.user[`${provider}Access`] = null
+        req.session.user[`${provider}Refresh`] = null
+    
+        const user = req.session.user
+    
+        User
+        .updateOne({_id: user._id}, user)
+        .exec()
+        .then(resp => {
+            res.send(200)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
+    }
+    catch (err){
+        console.log(err)
     }
 });
 

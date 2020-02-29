@@ -19,6 +19,7 @@ class App extends React.Component {
     <h2>Stream Gather</h2>
     <h1><ButtonList
           user = {this.props.user}
+          logout = {this.props.logout}
         ></ButtonList></h1>
     <StreamDrawer 
       streams = {this.props.streams}

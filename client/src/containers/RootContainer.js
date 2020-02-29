@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../App'
-import { fetchUser, fetchStreams } from '../actions'
+import { fetchUser, fetchStreams, logout } from '../actions'
 import { connect } from 'react-redux';
 
 const RootContainer = props => <App {...props}/>;
@@ -13,5 +13,5 @@ const mapStateToProps = state => {
 }
   
 export default connect(mapStateToProps, 
-  { fetchUser, fetchStreams }
+  { fetchUser, fetchStreams, logout }
 )(RootContainer);

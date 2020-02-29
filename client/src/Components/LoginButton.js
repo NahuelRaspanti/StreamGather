@@ -4,10 +4,10 @@ import _ from 'lodash'
 
 const LoginButton = ({app, user}) => {
     const {name, href, text, color} = app;
-    const userProfile = name === "Twitch" ? user[1] : user[2];
+    const userProfile = name === "Twitch" ? user.user[1] : user.user[2];
 
     const shouldShowProfile = () => {
-        var usr = user[0];
+        var usr = user.user[0];
         if(_.isEmpty(usr)) return false;
         if(name === 'Twitch') {
             return usr.twitchId === null ? false : true;
@@ -27,7 +27,7 @@ const LoginButton = ({app, user}) => {
                     <div>
                         <Typography>{userProfile.username}</Typography>
                         <Typography>{name}</Typography>
-                        <Typography>Logout</Typography>
+                        <Typography component = 'a' onClick = {() => user.logout(name.toLowerCase())}>Logout</Typography>
                     </div>
                 </div>
             )

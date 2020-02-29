@@ -8,6 +8,14 @@ export const fetchUser = () => async dispatch => {
     dispatch({ type: 'FETCH_USER', payload: response.data})
 }
 
+export const logout = (provider) => async dispatch => {
+    await axios.post('/api/logout/' + provider,
+    {withCredentials: true});
+
+    dispatch(fetchUser());
+    dispatch(fetchStreams());
+}
+
 export const fetchStreams = () => async dispatch => {
     var twitchStreams = await fetchTwitchStreams();
     var mixerStreams = await fetchMixerStreams();
