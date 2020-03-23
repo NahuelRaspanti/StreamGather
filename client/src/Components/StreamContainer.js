@@ -44,6 +44,9 @@ const ShowMixer = (name) => {
         src= {`https://mixer.com/embed/player/${name}`}
         height="640"
         width="390"
+        allowFullScreen="true"
+        scrolling="no"
+        auto
         >
         </iframe>
     )
