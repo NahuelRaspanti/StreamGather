@@ -9,6 +9,15 @@ const useStyles = makeStyles(theme => ({
         flexBasis: '50%',
         position: 'relative'
     },
+    overlayContainer: {
+        '&:hover': {
+            opacity: 1,
+            cursor: 'pointer'
+        },
+        display: 'flex',
+        opacity: 0
+        
+    },
     overlayPopup: {
         position: 'relative',
         verticalAlign: 'middle',
@@ -19,16 +28,7 @@ const useStyles = makeStyles(theme => ({
         right: 0,
         height: '100%',
         width: '50%',
-        opacity: 0,
-        transition: theme.transitions.create('height', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-          }),
         background: 'rgba(0,0,0,.7)',
-        '&:hover': {
-            opacity: 100,
-            cursor: 'pointer'
-        }
     },
     text: {
         position: 'relative',
@@ -80,7 +80,7 @@ const StreamContainer =  ({name, provider, removeStream, selectChat, streamCount
     return (
         <div className = {classes.container} style = {{flexBasis: `${streamCount === 2 ? '100%' : '50%'}`}}>
             {Selector(name, provider)}
-            <div style = {{display: 'flex', position: 'absolute', width: '100%', height: '25%'}}>
+            <div className = {classes.overlayContainer} style = {{position: 'absolute', width: '100%', height: '25%'}}>
                 <div className = {classes.overlayPopup} onClick = {() => removeStream(name)}>
                     <Typography className = {classes.text}>
                     REMOVE STREAM

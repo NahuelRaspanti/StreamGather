@@ -45,7 +45,8 @@ export const removeStream = (name) => (dispatch, getState) => {
         return e.name !== name
     })
     dispatch({type: 'REMOVE_STREAM', payload: payload})
-    dispatch({ type: 'SELECT_CHAT', payload: payload[0].name})
+    if(streams.length > 1)
+        dispatch({ type: 'SELECT_CHAT', payload: payload[0].name})
 }
 
 export const selectChat = (name) => dispatch => {

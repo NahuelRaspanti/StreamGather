@@ -1,7 +1,5 @@
 import React from 'react';
 import './App.css';
-import ButtonList from './Components/ButtonList';
-import StreamGrid from './Components/StreamGrid';
 import StreamDrawer from './Components/Drawer'
 import { CssBaseline } from '@material-ui/core';
 

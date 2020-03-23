@@ -1,7 +1,6 @@
 import React from 'react';
 import StreamContainer from './StreamContainer';
 import ChatContainer from './ChatContainer';
-import { selectStream } from '../actions';
 
 const mapStreams = (selectStreams, removeStream, selectChat) => {
     return (selectStreams.map(selected => {

@@ -35,20 +35,23 @@ const ShowTwitch = (name) => {
     )
 }
 
-const Selector = (name, provider) => {
-    if(provider === 'twitch') {
-        return ShowTwitch(name)
-    }
-    else if (provider === 'mixer'){
-        return ShowMixer(name)
-    }
-}
+
 
 const ChatContainer =  ({name, provider, selectedChat}) => {
     var classes = useStyles();
+
+    const Selector = () => {
+        if(provider === 'twitch') {
+            return ShowTwitch(name)
+        }
+        else if (provider === 'mixer'){
+            return ShowMixer(name)
+        }
+    }
+
     return (
         <div className = {classes.container} style = {{display: `${selectedChat === name ? 'block' : 'none'}`}}>
-            {Selector(name, provider)}
+            {Selector()}
         </div>
     )
 }
