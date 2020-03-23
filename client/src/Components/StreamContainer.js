@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
         bottom: 0,
         left: 0,
         right: 0,
-        height: '25%',
+        height: '100%',
         width: '50%',
         opacity: 0,
         transition: theme.transitions.create('height', {
@@ -77,7 +77,7 @@ const StreamContainer =  ({name, provider, removeStream, selectChat, streamCount
     return (
         <div className = {classes.container} style = {{flexBasis: `${streamCount === 2 ? '100%' : '50%'}`}}>
             {Selector(name, provider)}
-            <div style = {{display: 'flex', position: 'absolute', width: '100%', height: '100%'}}>
+            <div style = {{display: 'flex', position: 'absolute', width: '100%', height: '25%'}}>
                 <div className = {classes.overlayPopup} onClick = {() => removeStream(name)}>
                     <Typography className = {classes.text}>
                     REMOVE STREAM
