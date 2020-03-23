@@ -4,9 +4,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { List, Avatar, Typography } from '@material-ui/core';
 
-const DrawerStream = ({stream}) => {
+const DrawerStream = ({stream, selectStream}) => {
     return(
-    <ListItem button key={stream.id} component = "a" href = {stream.url} target = "_blank">
+    <ListItem button key={stream.id} component = "button" onClick = {() => selectStream(stream.streamerName, stream.provider)}>
         <ListItemIcon>
             <Avatar alt={"Avatar"} src={stream.avatar}></Avatar>
         </ListItemIcon>

@@ -161,7 +161,7 @@ export default function MiniDrawer({streams, user, logout, selectStream, removeS
         <Divider />
         <List>
           {streams.streams.map(str => (
-            <DrawerStream stream = {str}></DrawerStream>
+            <DrawerStream stream = {str} selectStream = {selectStream}></DrawerStream>
           ))}
         </List>
       </Drawer>
