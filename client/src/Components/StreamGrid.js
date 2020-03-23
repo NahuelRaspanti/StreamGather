@@ -14,7 +14,7 @@ const StreamGridStyled = styled(Grid)({
 
 class StreamGrid extends React.Component {
     render() {
-        const {streams, selectStream} = this.props;
+        const {streams, selectStream, isLoading} = this.props;
 
         const strs = streams.map(stream => {
             return <StreamCard key={stream.id} stream = {stream} selectStream = {selectStream}></StreamCard>
@@ -42,7 +42,7 @@ class StreamGrid extends React.Component {
 
         const renderGrid = () => {
             var skels = []
-            if(streams.length === 0){
+            if(isLoading){
                 _.times(15, () => { skels.push(Skel())})
                 return(
                 <div style = {{padding: '5px', width: '100%'}}>

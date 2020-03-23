@@ -17,12 +17,14 @@ export const logout = (provider) => async dispatch => {
 }
 
 export const fetchStreams = () => async dispatch => {
+    dispatch({ type: 'LOAD_STREAM', payload: true});
     var twitchStreams = await fetchTwitchStreams();
     var mixerStreams = await fetchMixerStreams();
 
     var streamsOrdered = _(twitchStreams).concat(mixerStreams).filter(_.size).orderBy('viewers', "desc").value();
 
     dispatch({ type: 'FETCH_STREAMS', payload: streamsOrdered});
+    dispatch({ type: 'LOAD_STREAM', payload: false});
 }
 
 export const selectStream = (name, provider) => (dispatch, getState) => {

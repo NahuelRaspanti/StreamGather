@@ -172,6 +172,7 @@ export default function MiniDrawer({streams, user, logout, selectStream, removeS
       <StreamGrid
           streams = {streams.streams}
           selectStream = {selectStream}
+          isLoading = {streams.loadingStreams}
         ></StreamGrid>
       </div>
     </div>

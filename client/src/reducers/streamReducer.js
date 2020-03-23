@@ -1,7 +1,8 @@
 const initialState = {
     streams: [],
     selectedStreams: [],
-    selectedChat: ''
+    selectedChat: '',
+    loadingStreams: false
 }
 
 export default (state = initialState, action) => {
@@ -30,6 +31,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 selectedChat: action.payload
+            }
+        case 'LOAD_STREAM':
+            return {
+                ...state,
+                loadingStreams: action.payload
             }
         default: 
             return state;
