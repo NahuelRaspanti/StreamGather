@@ -27,7 +27,7 @@ const LoginButton = ({app, user}) => {
                     <div>
                         <Typography>{userProfile.username}</Typography>
                         <Typography>{name}</Typography>
-                        <Typography component = 'a' onClick = {() => user.logout(name.toLowerCase())}>Logout</Typography>
+                        <Typography style = {{cursor: 'pointer'}} variant = 'button' onClick = {() => user.logout(name.toLowerCase())}>Logout</Typography>
                     </div>
                 </div>
             )
