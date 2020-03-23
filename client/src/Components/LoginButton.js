@@ -37,7 +37,7 @@ const LoginButton = ({app, user}) => {
                 <a className = "btn login-btn"
                     href = {href}
                     title = {name}
-                    style={{ backgroundColor: color, margin: 5, display: "inline-flex", maxWidth: 'fit-content'}}>
+                    style={{ backgroundColor: color, margin: 5, display: "inline-flex"}}>
                     <span>{text}</span>
                 </a>
                 )

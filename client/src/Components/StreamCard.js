@@ -1,8 +1,9 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
-import { Grid, Avatar, Typography, Box, Link } from '@material-ui/core';
+import { Grid, Avatar, Typography, Box, Link, IconButton, Tooltip } from '@material-ui/core';
 import {ReactComponent as TwitchSVG} from '../Images/twitchsvg.svg'
 import {ReactComponent as MixerSVG} from '../Images/mixersvg.svg'
+import AddIcon from '@material-ui/icons/Add';
 
 const styles = {
     divBox: {
@@ -17,6 +18,12 @@ const styles = {
         borderTopRightRadius: '4px',
         borderBottomRightRadius: '4px',
         borderBottomLeftRadius: '4px'
+    },
+    addIcon: {
+        top: '12px',
+        right: '4px',
+        position: 'absolute',
+        display: 'flex'
     }
 }
 
@@ -27,7 +34,7 @@ const providerIcon = (provider) => {
     return <MixerSVG style = {{top: '12px', right: '8px', position: 'relative', display: 'block', backgroundSize: '30px 30px'}}></MixerSVG>
 }
 
-const StreamCard = ({stream}) => {
+const StreamCard = ({stream, selectStream}) => {
     return(
     <Grid item xs = {12} xl = {2} >
         <Card style = {{maxWidth: '320px', minWidth: '250px'}}>
@@ -37,6 +44,11 @@ const StreamCard = ({stream}) => {
                 <div style = {styles.divBox}>
                     <span style = {{color: 'white'}}>{stream.viewers} viewers</span>
                 </div>
+                <Tooltip title = "Add to MultiStream">
+                    <IconButton style = {styles.addIcon} onClick = {e => {e.preventDefault(); selectStream(stream.streamerName, stream.provider);}}>
+                        <AddIcon></AddIcon>
+                    </IconButton>
+                </Tooltip>
             </div>
             <div style = {{padding: '8px', alignItems: 'center', display: 'flex', flexGrow: '1'}}>
                 <Avatar alt={"Avatar"} src={stream.avatar} style={{position: 'relative', display: 'block', width: '38px', height: '38px'}}></Avatar>

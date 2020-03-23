@@ -11,10 +11,10 @@ const StreamGridStyled = styled(Grid)({
 
 class StreamGrid extends React.Component {
     render() {
-        const {streams} = this.props;
+        const {streams, selectStream} = this.props;
 
         const strs = streams.map(stream => {
-            return <StreamCard key={stream.id} stream = {stream}></StreamCard>
+            return <StreamCard key={stream.id} stream = {stream} selectStream = {selectStream}></StreamCard>
         });
         return (
             <div style = {{padding: '5px', width: '100%'}}>

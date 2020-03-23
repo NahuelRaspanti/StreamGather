@@ -17,12 +17,13 @@ class App extends React.Component {
     <div className="App">
     <CssBaseline/>
     <h2>Stream Gather</h2>
-    <h1><ButtonList
-          user = {this.props.user}
-          logout = {this.props.logout}
-        ></ButtonList></h1>
     <StreamDrawer 
       streams = {this.props.streams}
+      user = {this.props.user}
+      logout = {this.props.logout}
+      selectStream = {this.props.selectStream}
+      removeStream = {this.props.removeStream}
+      selectChat = {this.props.selectChat}
     ></StreamDrawer>
 
     </div>

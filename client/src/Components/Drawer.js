@@ -19,6 +19,9 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import DrawerStream from './DrawerStream';
 import StreamGrid from './StreamGrid';
+import MultiStream from './MultiStream';
+import ButtonList from './ButtonList';
+import Logo from '../Images/StreamGatherLogo.png'
 
 const drawerWidth = 240;
 
@@ -81,9 +84,17 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  contentSpacer: theme.mixins.toolbar,
+  container: {
+    width: '100%'
+  },
+  buttonList: {
+    position: 'absolute',
+    right: '30px'
+  }
 }));
 
-export default function MiniDrawer({streams}) {
+export default function MiniDrawer({streams, user, logout, selectStream, removeStream, selectChat}) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -120,6 +131,13 @@ export default function MiniDrawer({streams}) {
           <Typography variant="h6" noWrap>
             StreamGather
           </Typography>
+          <img src = {Logo} height = '48px'></img>
+          <div className = {classes.buttonList}>
+          <ButtonList
+          user = {user}
+          logout = {logout}
+        ></ButtonList>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -142,14 +160,24 @@ export default function MiniDrawer({streams}) {
         </div>
         <Divider />
         <List>
-          {streams.map(str => (
+          {streams.streams.map(str => (
             <DrawerStream stream = {str}></DrawerStream>
           ))}
         </List>
       </Drawer>
+      <div className = {clsx(classes.contentSpacer, classes.container)}>
+      <MultiStream
+        selectedStreams = {streams.selectedStreams}
+        removeStream = {removeStream}
+        selectChat = {selectChat}
+        selectedChat = {streams.selectedChat}
+      >
+      </MultiStream>
       <StreamGrid
-          streams = {streams}
+          streams = {streams.streams}
+          selectStream = {selectStream}
         ></StreamGrid>
+      </div>
     </div>
   );
 }

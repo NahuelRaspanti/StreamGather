@@ -345,7 +345,7 @@ const fetchMixerUser = async (req, access, userId, refresh) => {
             const refreshedUser = await refreshMixerToken(userId, refresh)
             if(refreshedUser === undefined) return;
             req.session.user = refreshedUser;
-            return mixerUser = await fetchMixerUser(req, refreshedUser.twitchAccess, userId, refreshedUser.twitchRefresh);
+            return mixerUser = await fetchMixerUser(req, refreshedUser.mixerAccess, userId, refreshedUser.mixerRefresh);
         }
     })
 }

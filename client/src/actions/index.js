@@ -25,6 +25,33 @@ export const fetchStreams = () => async dispatch => {
     dispatch({ type: 'FETCH_STREAMS', payload: streamsOrdered});
 }
 
+export const selectStream = (name, provider) => (dispatch, getState) => {
+    var state = getState();
+    var streams = state.streams.selectedStreams;
+    if(_.find(streams, e => {return e.name === name})) return;
+    if(streams.length < 4 && streams.length === 0 ) {
+        dispatch({type: 'SELECT_STREAM', payload: {name, provider}})
+        dispatch({ type: 'SELECT_CHAT', payload: name})
+    }
+    else {
+        dispatch({type: 'SELECT_STREAM', payload: {name, provider}})
+    }
+}
+
+export const removeStream = (name) => (dispatch, getState) => {
+    var state = getState();
+    var streams = state.streams.selectedStreams;
+    var payload = _.filter(streams, e => {
+        return e.name !== name
+    })
+    dispatch({type: 'REMOVE_STREAM', payload: payload})
+    dispatch({ type: 'SELECT_CHAT', payload: payload[0].name})
+}
+
+export const selectChat = (name) => dispatch => {
+    dispatch({ type: 'SELECT_CHAT', payload: name})
+}   
+
 const fetchTwitchStreams = async () => {
     const response = await axios.get('/api/get_twitch_streams',
     {withCredentials: true});
