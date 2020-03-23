@@ -1,11 +1,12 @@
 import React from 'react';
 import StreamContainer from './StreamContainer';
 import ChatContainer from './ChatContainer';
+import { selectStream } from '../actions';
 
 const mapStreams = (selectStreams, removeStream, selectChat) => {
     return (selectStreams.map(selected => {
             return (
-                <StreamContainer name = {selected.name} provider = {selected.provider} removeStream = {removeStream} selectChat = {selectChat}></StreamContainer>
+                <StreamContainer name = {selected.name} provider = {selected.provider} removeStream = {removeStream} selectChat = {selectChat} streamCount = {selectStreams.length}></StreamContainer>
             )
         })
     )

@@ -29,11 +29,11 @@ export const selectStream = (name, provider) => (dispatch, getState) => {
     var state = getState();
     var streams = state.streams.selectedStreams;
     if(_.find(streams, e => {return e.name === name})) return;
-    if(streams.length < 4 && streams.length === 0 ) {
+    if(streams.length < 6 && streams.length === 0 ) {
         dispatch({type: 'SELECT_STREAM', payload: {name, provider}})
         dispatch({ type: 'SELECT_CHAT', payload: name})
     }
-    else {
+    else if (streams.length < 6) {
         dispatch({type: 'SELECT_STREAM', payload: {name, provider}})
     }
 }
