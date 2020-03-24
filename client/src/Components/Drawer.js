@@ -89,7 +89,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MiniDrawer({streams, user, logout, selectStream, removeStream, selectChat}) {
+export default function MiniDrawer({streams, user, logout, selectStream, removeStream, selectChat, teatherMode}) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -110,7 +110,7 @@ export default function MiniDrawer({streams, user, logout, selectStream, removeS
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
         })}
-        style = {{backgroundColor: '#424242'}}
+        style = {{backgroundColor: '#424242', display: `${streams.teatherMode ? 'none' : 'block'}`}}
       >
         <Toolbar>
           <IconButton
@@ -137,6 +137,7 @@ export default function MiniDrawer({streams, user, logout, selectStream, removeS
         </Toolbar>
       </AppBar>
       <Drawer
+        style = {{display: `${streams.teatherMode ? 'none' : 'block'}`}}
         variant="permanent"
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
@@ -161,12 +162,14 @@ export default function MiniDrawer({streams, user, logout, selectStream, removeS
           ))}
         </List>
       </Drawer>
-      <div className = {clsx(classes.contentSpacer, classes.container)}>
+      <div className = {clsx(classes.contentSpacer, classes.container)} style = {{marginTop: `${streams.teatherMode ? '0px' : '64px'}`}}>
       <MultiStream
         selectedStreams = {streams.selectedStreams}
         removeStream = {removeStream}
         selectChat = {selectChat}
         selectedChat = {streams.selectedChat}
+        setTeatherMode = {teatherMode}
+        teatherMode = {streams.teatherMode}
       >
       </MultiStream>
       <StreamGrid

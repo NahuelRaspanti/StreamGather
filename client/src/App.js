@@ -14,7 +14,6 @@ class App extends React.Component {
     return (
     <div className="App">
     <CssBaseline/>
-    <h2>Stream Gather</h2>
     <StreamDrawer 
       streams = {this.props.streams}
       user = {this.props.user}
@@ -22,6 +21,7 @@ class App extends React.Component {
       selectStream = {this.props.selectStream}
       removeStream = {this.props.removeStream}
       selectChat = {this.props.selectChat}
+      teatherMode = {this.props.teatherMode}
     ></StreamDrawer>
 
     </div>

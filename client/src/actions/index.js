@@ -1,6 +1,11 @@
 import axios from 'axios';
 import _ from 'lodash';
 
+
+export const teatherMode = () => dispatch => {
+    dispatch({ type: 'TEATHER_MODE' })
+}
+
 export const fetchUser = () => async dispatch => {
     const response = await axios.get('/api/fetch_current_user',
     {withCredentials: true});
