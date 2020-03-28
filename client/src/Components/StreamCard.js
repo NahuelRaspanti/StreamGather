@@ -1,9 +1,9 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
-import { Grid, Avatar, Typography, Box, Link, IconButton, Tooltip } from '@material-ui/core';
+import { Grid, Avatar, Typography, Box, IconButton, Tooltip, CardActionArea } from '@material-ui/core';
 import {ReactComponent as TwitchSVG} from '../Images/twitchsvg.svg'
 import {ReactComponent as MixerSVG} from '../Images/mixersvg.svg'
-import AddIcon from '@material-ui/icons/Add';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
 const styles = {
     divBox: {
@@ -19,7 +19,17 @@ const styles = {
         borderBottomRightRadius: '4px',
         borderBottomLeftRadius: '4px'
     },
-    addIcon: {
+    openInNewIcon: {
+        padding: '0px'
+    },
+    divIcon: {
+        backgroundColor: 'rgba(17,17,17,0.8)', 
+        paddingLeft: '4px', 
+        paddingRight: '4px',
+        borderTopLeftRadius: '4px',
+        borderTopRightRadius: '4px',
+        borderBottomRightRadius: '4px',
+        borderBottomLeftRadius: '4px',
         top: '12px',
         right: '4px',
         position: 'absolute',
@@ -37,18 +47,22 @@ const providerIcon = (provider) => {
 const StreamCard = ({stream, selectStream}) => {
     return(
     <Grid item xs = {12} xl = {2} lg = {2} md = {4} sm = {4} >
-        <Card style = {{maxWidth: '400px', width: '100%', minWidth: '200px'}} title = {stream.title}>
-            <Link href = {stream.url} target = "_blank" color="inherit" style={{textDecoration: 'none'}}>
-            <div style = {{position: 'relative'}}>
-                <img alt = {[`${stream.streamerName} image`]} src = {stream.image} style = {{width: '100%', height: 'auto', verticalAlign: 'middle'}}></img>
+        <Card style = {{maxWidth: '400px', width: '100%', minWidth: '200px', cursor: 'pointer'}}>
+            <div style = {{position: 'relative', zIndex: '99'}}>
                 <div style = {styles.divBox}>
                     <span style = {{color: 'white'}}>{stream.viewers} viewers</span>
                 </div>
-                <Tooltip title = "Add to MultiStream">
-                    <IconButton style = {styles.addIcon} onClick = {e => {e.preventDefault(); selectStream(stream.streamerName, stream.provider);}}>
-                        <AddIcon></AddIcon>
-                    </IconButton>
-                </Tooltip>
+                <div style = {styles.divIcon}>
+                    <Tooltip title = "Open in a new tab">
+                            <IconButton style = {styles.openInNewIcon} href = {stream.url} target = "_blank">
+                                <OpenInNewIcon></OpenInNewIcon>
+                            </IconButton>
+                    </Tooltip>
+                </div>
+            </div>
+            <CardActionArea onClick = {e => {e.preventDefault(); selectStream(stream.streamerName, stream.provider);}} title = {stream.title}>
+            <div style = {{position: 'relative'}}>
+                <img alt = {[`${stream.streamerName} image`]} src = {stream.image} style = {{width: '100%', height: 'auto', verticalAlign: 'middle'}}></img>
             </div>
             <div style = {{padding: '8px', alignItems: 'center', display: 'flex', flexGrow: '1'}}>
                 <Avatar alt={"Avatar"} src={stream.avatar} style={{position: 'relative', display: 'block', width: '38px', height: '38px'}}></Avatar>
@@ -63,7 +77,7 @@ const StreamCard = ({stream, selectStream}) => {
                 </div>
                 {providerIcon(stream.provider)}
             </div>
-            </Link>
+            </CardActionArea>
         </Card>
     </Grid>
     ) 
