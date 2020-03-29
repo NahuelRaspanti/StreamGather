@@ -89,7 +89,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MiniDrawer({streams, user, logout, selectStream, removeStream, selectChat, teatherMode}) {
+export default function MiniDrawer({streams, user, logout, selectStream, removeStream, selectChat, teatherMode, hideShowChat}) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -170,6 +170,8 @@ export default function MiniDrawer({streams, user, logout, selectStream, removeS
         selectedChat = {streams.selectedChat}
         setTeatherMode = {teatherMode}
         teatherMode = {streams.teatherMode}
+        hideChat = {hideShowChat}
+        isChatHidden = {streams.isChatHidden}
       >
       </MultiStream>
       <StreamGrid

@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
         flexBasis: '50%',
         position: 'relative',
         height: '100%',
-        width: '350px'
+        width: '100%'
     }
   }));
 
@@ -18,7 +18,7 @@ const ShowMixer = (name) => {
         <iframe style = {{width: '100%', height: '100%'}}
         src= {`https://mixer.com/embed/chat/${name}`}
         height="100%"
-        width="350">
+        width="100%">
         </iframe>
     )
 }
@@ -30,7 +30,7 @@ const ShowTwitch = (name) => {
                 id="chat_embed"
                 src={`https://www.twitch.tv/embed/${name}/chat?darkpopout`}
                 height="100%"
-                width="350">
+                width="100%">
             </iframe>
     )
 }

@@ -3,7 +3,8 @@ const initialState = {
     selectedStreams: [],
     selectedChat: '',
     loadingStreams: false,
-    teatherMode: false
+    teatherMode: false,
+    isChatHidden: false
 }
 
 export default (state = initialState, action) => {
@@ -42,6 +43,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 teatherMode: !state.teatherMode
+            }
+        case 'HIDE_CHAT':
+            return {
+                ...state,
+                isChatHidden: !state.isChatHidden
             }
         default: 
             return state;

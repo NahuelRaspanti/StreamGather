@@ -22,6 +22,7 @@ class App extends React.Component {
       removeStream = {this.props.removeStream}
       selectChat = {this.props.selectChat}
       teatherMode = {this.props.teatherMode}
+      hideShowChat = {this.props.hideShowChat}
     ></StreamDrawer>
 
     </div>

@@ -18,6 +18,15 @@ const useStyles = makeStyles(theme => ({
         opacity: 0
         
     },
+    overlayContainerAnim: {
+        display: 'flex',
+        animation: '$cssAnimation 0s 2s forwards'
+    },
+    '@keyframes cssAnimation': {
+        to: {
+            opacity: 0
+        }
+    },
     overlayPopup: {
         position: 'relative',
         verticalAlign: 'middle',
@@ -77,10 +86,14 @@ const Selector = (name, provider) => {
 
 const StreamContainer =  ({name, provider, removeStream, selectChat, streamCount, setTeatherMode}) => {
     var classes = useStyles();
+    const [animFinished, anim] = React.useState(false);
+    setTimeout(() => {
+        anim(true)
+    }, 3000)
     return (
         <div className = {classes.container} style = {{flexBasis: `${streamCount === 2 ? '100%' : '50%'}`}}>
             {Selector(name, provider)}
-            <div className = {classes.overlayContainer} style = {{position: 'absolute', width: '100%', height: '15%'}}>
+            <div className = {animFinished ? classes.overlayContainer : classes.overlayContainerAnim} style = {{position: 'absolute', width: '100%', height: '15%'}}>
                 <div className = {classes.overlayPopup} onClick = {() => removeStream(name)}>
                     <Typography className = {classes.text}>
                     REMOVE STREAM
@@ -89,11 +102,6 @@ const StreamContainer =  ({name, provider, removeStream, selectChat, streamCount
                 <div className = {classes.overlayPopup} onClick = {() => selectChat(name)}>
                     <Typography className = {classes.text}>
                     SELECT CHAT
-                    </Typography>
-                </div>  
-                <div className = {classes.overlayPopup} onClick = {() => setTeatherMode()}>
-                    <Typography className = {classes.text}>
-                    TEATHER MODE
                     </Typography>
                 </div>
             </div>
