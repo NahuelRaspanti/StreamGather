@@ -11,10 +11,12 @@ export const hideShowChat = () => dispatch => {
 }
 
 export const fetchUser = () => async dispatch => {
+    dispatch( {type: 'LOAD_USER', payload: true} )
     const response = await axios.get('/api/fetch_current_user',
     {withCredentials: true});
     
     dispatch({ type: 'FETCH_USER', payload: response.data})
+    dispatch( {type: 'LOAD_USER', payload: false} )
 }
 
 export const logout = (provider) => async dispatch => {
@@ -25,7 +27,10 @@ export const logout = (provider) => async dispatch => {
     dispatch(fetchStreams());
 }
 
-export const fetchStreams = () => async dispatch => {
+export const fetchStreams = () => async (dispatch, getState) => {
+    var state = getState();
+    var user = state.user;
+    if(user === undefined) return;
     dispatch({ type: 'LOAD_STREAM', payload: true});
     var twitchStreams = await fetchTwitchStreams();
     var mixerStreams = await fetchMixerStreams();

@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import { styled } from '@material-ui/core/styles';
 import Skeleton from '@material-ui/lab/Skeleton';
 import _ from 'lodash'
-import { Card } from '@material-ui/core';
+import { Card, Typography } from '@material-ui/core';
 
 
 const StreamGridStyled = styled(Grid)({
@@ -14,7 +14,7 @@ const StreamGridStyled = styled(Grid)({
 
 class StreamGrid extends React.Component {
     render() {
-        const {streams, selectStream, isLoading} = this.props;
+        const {streams, selectStream, isLoading, user} = this.props;
 
         const strs = streams.map(stream => {
             return <StreamCard key={stream.id} stream = {stream} selectStream = {selectStream}></StreamCard>
@@ -42,21 +42,52 @@ class StreamGrid extends React.Component {
 
         const renderGrid = () => {
             var skels = []
-            if(isLoading){
-                _.times(15, () => { skels.push(Skel())})
-                return(
-                <div style = {{padding: '5px', width: '100%'}}>
-                    <StreamGridStyled container spacing={1}>{skels}</StreamGridStyled>
-                </div>
+            if(!_.isEmpty(user.user) && (user.user[0].twitchId !== null || user.user[0].mixerId !== null)){
+                if(isLoading){
+                    _.times(15, () => { skels.push(Skel())})
+                    return(
+                    <div style = {{padding: '5px', width: '100%'}}>
+                        <StreamGridStyled container spacing={1}>{skels}</StreamGridStyled>
+                    </div>
+                    )
+                }
+                else{
+                    if(strs.length > 0) {
+                        return(
+                        <div style = {{padding: '5px', width: '100%'}}>
+                            <StreamGridStyled container spacing={1}>{strs}</StreamGridStyled>
+                        </div>
+                        )
+                    }
+                    else if (user.user[0].twitchId !== null || user.user[0].mixerId !== null) {
+                        return (
+                            <div style = {{padding: '5px', width: '100%'}}>
+                                <Typography>
+                                    Looks like there are no streams online that you are following! 
+                                </Typography>
+                            </div>
+                        )
+                    }
+                    else return null
+                }
+            }
+            else if(!user.isProfileLoading) {
+                return (
+                    <div style = {{padding: '5px', width: '100%'}}>
+                        <Typography variant = "h2">
+                            Welcome to Stream Gather!
+                        </Typography>
+                        <Typography>
+                            To view your favorite streamers online you need to login on the top right corner of the page
+                        </Typography>
+
+                    </div>
                 )
             }
-            else{
-                return(
-                <div style = {{padding: '5px', width: '100%'}}>
-                    <StreamGridStyled container spacing={1}>{strs}</StreamGridStyled>
-                </div>
-                )
+            else {
+                return null
             }
+            
         }
 
         return (

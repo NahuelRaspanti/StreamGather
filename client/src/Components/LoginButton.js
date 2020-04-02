@@ -17,11 +17,11 @@ const useStyles = makeStyles(theme => ({
 
 const LoginButton = ({app, user}) => {
     const {name, href, text, color} = app;
-    const userProfile = name === "Twitch" ? user.user[1] : user.user[2];
+    const userProfile = name === "Twitch" ? user.user.user[1] : user.user.user[2];
     const classes = useStyles();
 
     const shouldShowProfile = () => {
-        var usr = user.user[0];
+        var usr = user.user.user[0];
         if(_.isEmpty(usr)) return false;
         if(name === 'Twitch') {
             return usr.twitchId === null ? false : true;
