@@ -28,7 +28,7 @@ const ShowTwitch = (name) => {
             <iframe frameborder="0"
                 scrolling="no"
                 id="chat_embed"
-                src={`https://www.twitch.tv/embed/${name}/chat?darkpopout`}
+                src={`https://www.twitch.tv/embed/${name}/chat?darkpopout&parent=stream-gather.herokuapp.com`}
                 height="100%"
                 width="100%">
             </iframe>

@@ -64,7 +64,7 @@ const ShowMixer = (name) => {
 const ShowTwitch = (name) => {
     return (
             <iframe style = {{width: '100%', height: '100%', border: 'none'}}
-            src= {`https://player.twitch.tv/?channel=${name}&muted=true&autoplay=true`}
+            src= {`https://player.twitch.tv/?channel=${name}&muted=true&autoplay=true&parent=stream-gather.herokuapp.com`}
             frameborder="0"
             height="640"
             width="390"
